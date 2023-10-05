@@ -47,7 +47,8 @@ const styles=StyleSheet.create({
 
     },
     dummyText:{
-        color: '',
+        textDecorationStyle: 'none',
+        color: 'green',
 
     },
     inputContainer:{
