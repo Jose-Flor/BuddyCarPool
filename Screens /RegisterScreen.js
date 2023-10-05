@@ -10,17 +10,23 @@ function RegisterScreen({navigation}){
     }
     return (
     <View style={styles.container} >
-        <Text>
-             Register screen
+        <View style={styles.textStyle}>
+
+        <Text style={styles.textStyle} >
+             Buddy Car Pool
         </Text>
+        <Text style={styles.textsyle2}>
+            The best app to find your next carpool buddy!
+        </Text>
+        </View>
         <View style={styles.inputContainer}>
             <TextInput style={styles.TextInpu} placeholder="Username"/>
 
         </View>
         <View style={styles.inputContainer}>
-            <TextInput  style={styles.TextInpu} placeholder="Passsword"/>
+            <TextInput  style={styles.TextInpu} placeholder="Password"/>
         </View>
-        <Button style={styles.dummyText} title="sign in" onPress={handleSignIn}/>
+        <Button style={styles.dummyText} title="Sign In" onPress={handleSignIn}/>
 
         <View>
 
@@ -33,7 +39,7 @@ function RegisterScreen({navigation}){
 export default RegisterScreen;
 const styles=StyleSheet.create({
     container:{
-      backgroundColor:'green',
+      backgroundColor:'white',
       flex:1,
       justifyContent: 'center',
       alignItems: 'center',
@@ -41,6 +47,7 @@ const styles=StyleSheet.create({
 
     },
     dummyText:{
+        color: '',
 
     },
     inputContainer:{
@@ -55,7 +62,21 @@ const styles=StyleSheet.create({
      padding:10,
      marginVertical:10,
      width:'100%'
+    },
+    textStyle:{
+        fontStyle:'italic',
+        fontSize:60,
+        color: 'green',
+        textAlign: 'center'
+    },
+    textsyle2:{
+        color:'black',
+        textAlign: 'center'
+        
+
+
     }
+
     
 }
 )    
