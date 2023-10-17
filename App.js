@@ -13,14 +13,10 @@ export default function App() {
 
       <Stack.Navigator initialRouteName='Register'>
         <Stack.Screen name='Register' component={RegisterScreen} options={{headerShown:false}}/>
-        <Stack.Screen  name='main' component={MainScreen} options={{headerShown:false}}/>
+        <Stack.Screen  name='main' component={MainScreen} />
 
       </Stack.Navigator>
-    </NavigationContainer>
-      
-      
-    
-    
+    </NavigationContainer> 
   );
 }
 
