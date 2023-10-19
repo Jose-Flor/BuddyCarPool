@@ -1,12 +1,39 @@
 
-import {Text, View} from "react-native"
+import {Text, View,StyleSheet} from "react-native"
+import DriverInfo from "../Information/DriverInfo";
 
 function Drivers(){
-    return <View>
-        <Text>
-            Here is drivers and Student looking for rides
-        </Text>
+    const driverDetail=DriverInfo();
+    return(
+     <View style={styles.container}>
+        <View style={styles.box}>
 
+        <Text> Full Name:{driverDetail.fullName}</Text>
+        <Text>phone Number:{driverDetail.contactInformation.phoneNumber}</Text>
+        <Text></Text>
+        </View>
+
+        
     </View>
+    );
 }
 export default Drivers;
+const styles=StyleSheet.create({
+    container:{
+        flex:1,
+        padding:10,
+        alignItems:'center',
+        justifyContent: 'center',
+    },
+    box:{
+        width:'80%',
+        padding:15,
+        borderWidth:1,
+        borderBlockColor:'black',
+        borderRadius:5,
+        backgroundColor:'balck'
+
+    },
+
+
+})

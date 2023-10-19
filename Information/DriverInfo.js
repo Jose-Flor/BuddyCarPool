@@ -23,10 +23,10 @@ function DriverInfo(){
 
 return {
     /* Profile Information */
-    fullName: "",
+    fullName: "Ali ",
     profilePicture: "",
     contactInformation: {
-        phoneNumber: ""
+        phoneNumber: "8059082768"
     },
     /* Driver's License Details */
     driversLicenseDetails: {

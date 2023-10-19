@@ -5,7 +5,7 @@ function RegisterScreen({navigation}){
         navigation.navigate('main')
     }
     const handleRegister=()=>{
-        navigation.navigate('register')
+        navigation.navigate('RegisterForm')
 
     }
     return (
@@ -30,7 +30,7 @@ function RegisterScreen({navigation}){
 
         <View>
 
-            <Button title="Register" />
+            <Button title="Register" onPress={handleRegister} />
         </View>
 
     </View>
