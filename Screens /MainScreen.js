@@ -6,6 +6,7 @@ import Messages from "./Messages";
 import maps from "./Map";
 import { GStyle } from "./General style/GStyle";
 import {Ionicons} from '@expo/vector-icons';
+import Driverlist from "../Information/DriverList";
 
 
 const BottomTabs=createBottomTabNavigator();
@@ -19,7 +20,7 @@ function TabsOverview(){
             tabBarStyle:{backgroundColor:GStyle.colors.bottmbTabs},
             tabBarActiveBackgroundColor:GStyle.colors.BottomTabsActive,
          }}>
-            <BottomTabs.Screen name="Driver" component={Drivers}
+            <BottomTabs.Screen name="Driver" component={Driverlist}
             options={{
                 title:'Recent Driver',
                 tabBarLabel:'Recent ',
