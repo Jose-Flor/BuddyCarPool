@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
-import {StyleSheet, Text, TextInput, View}from'react-native';
-
+import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert}from'react-native';
+import auth from '@react-native-firebase/auth'
 
 
 function RegisterForm({ isLogin, onSubmit, credentialsInvalid={} }) {
@@ -11,7 +11,10 @@ function RegisterForm({ isLogin, onSubmit, credentialsInvalid={} }) {
     const [enteredConfirmEmail, setEnteredConfirmEmail] = useState(''); 
     const [enteredPassword, setEnteredPassword] = useState('');
     const [enteredConfirmPassword, setEnteredConfirmPassword] = useState(''); 
-  
+    const [isDriver,setIsDriver]=useState(`false`);
+    const [licensePlate, setLicensePlate] = useState('');
+    const [driverLicense, setDriverLicense] = useState('');
+    const [carModel, setCarModel] = useState('');
     const {
       email: emailIsInvalid, 
       confirmEmail: emailsDontMatch,
@@ -42,21 +45,51 @@ function RegisterForm({ isLogin, onSubmit, credentialsInvalid={} }) {
     }
 
 }
+function updateDriverInputValueHandler(inputType, enteredValue) {
+    switch (inputType) {
+      case 'licensePlate':
+        setLicensePlate(enteredValue);
+        break;
+      case 'driverLicense':
+        setDriverLicense(enteredValue);
+        break;
+      case 'carModel':
+        setCarModel(enteredValue);
+        break;
+    }
+  }
 function submitHnadler(){
-    onSubmit({
+    const isStudentEmail=enteredEmail.endsWith('@my.csun.edu');
+    if (!isStudentEmail) {
+        alert('You must use a student email to register.');
+        return;
+    }
+    if (isDriver && (!licensePlate || !driverLicense || !carModel)) {
+        alert('Please fill in all the fields related to driver information.');
+        return;
+    }
+    
+    const userData = {
         firstName,
         lastName,
-        email:enteredEmail,
-        confirmEmail:enteredConfirmEmail,
-        password:enteredPassword,
-        confirmPassword:enteredConfirmPassword,
-    })
+        email: enteredEmail,
+        password: enteredPassword,
+        isDriver, // this assumes you have a way to set 'isDriver' in your state
+    };
+    if (isDriver) {
+        userData.driverInfo = {
+            licensePlate,
+            driverLicense,
+            carModel,
+        };
+    }
+    onSubmit(userData)
 }
 
    //
   
-    return (
-    <View style={style.container}>
+   return (
+    <ScrollView style={style.container}>
        <Text style={style.Header}>What is you name </Text>
        <View style={style.SubHeader}> 
        </View>
@@ -75,18 +108,47 @@ function submitHnadler(){
         <TextInput
         autoCapitalize='none'
         placeholder="Enter your Last name"
-        onChangeText={(text) => updateInputValueHnadler('LastName',text)}
+        onChangeText={(text) => updateInputValueHnadler('lastName',text)}
         value={lastName}
         style={style.inputContainer}
 
         />
+         <View style={style.switchContainer}>
+        <Text>Are you a driver?</Text>
+        <Switch
+          value={isDriver}
+          onValueChange={(newValue) => setIsDriver(newValue)}
+        />
+      </View>
+      {isDriver && (
+        <>
+          <TextInput
+            placeholder="License Plate"
+            onChangeText={(text) => updateDriverInputValueHandler('licensePlate', text)}
+            value={licensePlate}
+            style={style.inputContainer}
+          />
+          <TextInput
+            placeholder="Driver License"
+            onChangeText={(text) =>updateDriverInputValueHandler('driverLicense', text)}
+            value={driverLicense}
+            style={style.inputContainer}
+          />
+          <TextInput
+            placeholder="Car Model"
+            onChangeText={(text) => updateDriverInputValueHandler('carModel', text)}
+            value={carModel}
+            style={style.inputContainer}
+          />
+        </>
+      )}
         <View>
 
        <Text style={[style.label,emailIsInvalid && style.labelIsInvalid]}>Email Address</Text>
        <TextInput 
        autoCapitalize='none'
        keyboardType='email-address'
-       onChangeText={(text) => updateInputValueHnadler('Email',text)}
+       onChangeText={(text) => updateInputValueHnadler('email',text)}
        value={enteredEmail}
        style={[style.inputContainer, emailIsInvalid&&style.inputIsInvalid]}
        />
@@ -95,6 +157,7 @@ function submitHnadler(){
         <View>
             <Text style={[style.label,emailsDontMatch && style.labelIsInvalid]}>
                 confirm email address
+
             </Text>
             <TextInput
             autoCapitalize='none'
@@ -124,7 +187,7 @@ function submitHnadler(){
                    </Text>
                    <TextInput 
                    autoCapitalize='none'
-                   onChangeText={(text) => updateInputValueHnadler ('confirmPasswords', text)}
+                   onChangeText={(text) => updateInputValueHnadler ('passwordconfirmation', text)}
                    value={enteredConfirmPassword}
                    style={[style.inputContainer, passwordsDontMatch,style.inputIsInvalid]}
                    
@@ -132,6 +195,9 @@ function submitHnadler(){
                 </View>
              )}
              <View>
+             <TouchableOpacity onPress={submitHnadler} style={style.button}>
+        <Text>Register</Text>
+      </TouchableOpacity>
             
              </View>
              
@@ -147,7 +213,7 @@ function submitHnadler(){
        
        <TextInput/>
 
-       </View>
+       </ScrollView>
 
     
 
@@ -199,10 +265,19 @@ const style=StyleSheet.create({
 
     },
     button:{
+        backgroundColor: '#387ef5',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
 
+    },
+    switchContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 10,
     }
     
         
     })
-
-    
