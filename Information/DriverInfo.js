@@ -23,7 +23,7 @@ function DriverInfo(){
 
 return {
     /* Profile Information */
-    fullName: "Ali ",
+    fullName: "Ali",
     profilePicture: "",
     contactInformation: {
         phoneNumber: "8059082768"

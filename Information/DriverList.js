@@ -13,7 +13,7 @@ class Drivers{
 }
 const Category=[
     new Drivers('1','Ali','234567',true,'ali.jpg','monday'),
-    new Drivers('2','Ali','234567',true,'ali.jpg','monday'),
+    new Drivers('2','Jose','234567',true,'ali.jpg','Tuesday'),
     new Drivers('3','Ali','234567',true,'ali.jpg','monday'),
     new Drivers('4','Ali','234567',true,'ali.jpg','monday'),
     new Drivers('5','Ali','234567',true,'ali.jpg','monday'),

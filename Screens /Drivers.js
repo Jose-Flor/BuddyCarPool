@@ -10,6 +10,8 @@ function Drivers(){
 
         <Text> Full Name:{driverDetail.fullName}</Text>
         <Text>phone Number:{driverDetail.contactInformation.phoneNumber}</Text>
+       
+
         <Text></Text>
         </View>
 
@@ -31,7 +33,7 @@ const styles=StyleSheet.create({
         borderWidth:1,
         borderBlockColor:'black',
         borderRadius:5,
-        backgroundColor:'balck'
+        backgroundColor:'black'
 
     },
 
