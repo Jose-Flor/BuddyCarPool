@@ -52,7 +52,7 @@ function RegisterScreen({navigation}){
         >
         <Text style={styles.buttonText} >Register</Text>
       </TouchableOpacity>
-      <View style={styles.image2Container}>
+      <View style={styles.image2}>
      <Image
      source={require('../assets/CSUNlogo.jpg')} 
      style={styles.image2}
