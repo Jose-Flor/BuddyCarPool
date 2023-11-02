@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert}from'react-native';
-import auth from '@react-native-firebase/auth'
+
 
 
 function RegisterForm({ isLogin, onSubmit, credentialsInvalid={} }) {
@@ -227,7 +227,7 @@ const style=StyleSheet.create({
     container:{
         flex:1,
         padding:20,
-        backgroundColor:'#A9E5BB',
+        backgroundColor:'#f94449',
     },
     Header:{
         fontSize:30,
@@ -265,7 +265,7 @@ const style=StyleSheet.create({
 
     },
     button:{
-        backgroundColor: '#387ef5',
+        backgroundColor: 'white',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
