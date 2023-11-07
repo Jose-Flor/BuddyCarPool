@@ -12,14 +12,12 @@ class Drivers{
     }
 }
 const Category=[
-    new Drivers('1','Ali','234567',true,'ali.jpg','monday'),
-    new Drivers('2','Jose','234567',true,'ali.jpg','Tuesday'),
-    new Drivers('3','Ali','234567',true,'ali.jpg','monday'),
-    new Drivers('4','Ali','234567',true,'ali.jpg','monday'),
-    new Drivers('5','Ali','234567',true,'ali.jpg','monday'),
-    new Drivers('6','Ali','234567',true,'ali.jpg','monday'),
-
-
+    new Drivers('1','Ali  ',' 22 ',true,'johnsample.jpg',' Available:Monday'),
+    new Drivers('2','John ','  ',true,'ali.jpg',' Available:Tuesday'),
+    new Drivers('3','John ','  ',true,'ali.jpg',' Available:Monday'),
+    new Drivers('4','Doe ','  ',true,'ali.jpg',' Available:Thursday'),
+    new Drivers('5','John ','  ',true,'ali.jpg',' Available:Friday'),
+    new Drivers('6','Doe ',' ',true,'ali.jpg',' Available:Monday'),
 ];
 
 

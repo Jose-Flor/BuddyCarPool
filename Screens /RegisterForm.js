@@ -265,7 +265,7 @@ const style=StyleSheet.create({
 
     },
     button:{
-        backgroundColor: 'white',
+    backgroundColor: 'white',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',

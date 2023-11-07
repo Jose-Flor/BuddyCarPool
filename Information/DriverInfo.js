@@ -26,7 +26,7 @@ return {
     fullName: "Ali",
     profilePicture: "",
     contactInformation: {
-        phoneNumber: "8059082768"
+    phoneNumber: "8059082768"
     },
     /* Driver's License Details */
     driversLicenseDetails: {
