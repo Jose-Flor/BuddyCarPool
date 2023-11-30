@@ -1,45 +1,66 @@
 
-import{View,Text,StyleSheet, ScrollView,Button}from 'react-native'
-function DriverOverView(){
+import{View,Text,StyleSheet, ScrollView,Button,Image,Alert}from 'react-native'
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+function DriverOverView({route}){
+const [drivers,setDrivers]=useState(null);
+const driverId=route.params?.driverId;
+useEffect(() => {
+    const fetchDriver = async () => {
+        try {
+            const storedDrivers = await AsyncStorage.getItem('drivers');
+            if (storedDrivers !== null) {
+                const drivers = JSON.parse(storedDrivers);
+                // Find the driver by ID or other unique property
+                const foundDriver = drivers.find(d => d.id === driverId);
+                setDrivers(foundDriver);
+            }
+        } catch (error) {
+            Alert.alert("Error", "Failed to load driver details");
+        }
+    };
+
+    fetchDriver();
+}, [driverId]);
+
+if (!drivers) {
+    return <View style={styles.container}><Text>Loading...</Text></View>;
+}
+    
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.content}>
-                <Text style={styles.bio}> Hello , my name is Ali,Im a csun student
-                 </Text>
-                 <Text style={styles.carDetails}>Car Model: Tesla Model S</Text>
-    <Text style={styles.carDetails}>License Plate: ABC-1234</Text>
-                 <Text style={styles.scheduleTitle}>Schedule:</Text>
-                <Text>Monday: 9am - 5pm</Text>
-                <Text>Tuesday: 10am - 6pm</Text>
-                <Text>Wednesday: 8am - 4pm</Text>
-                <Text>Thursday: 9am - 5pm</Text>
-                <Text>Friday: 9am - 5pm</Text>
-                <Text>Saturday: Off</Text>
-                <Text>Sunday: Off</Text>
-                <Button title="Text" onPress={() => console.log('Button Prtessed')}/>
-
+             <View style={styles.header}>
+                <Image source={{uri:drivers.pictureUrl}}style={styles.driverImage}/>
+                <Text>{drivers.firstName}{drivers.lastName}</Text>
+                <Text>{drivers.email}</Text>
+                <Text>{drivers.Schedule}</Text>
 
             </View>
 
         </ScrollView>
 
     );
+    //the button must navigate to text 
+
 };
 export default DriverOverView;
 const styles = StyleSheet.create({
     DriverOverView:{
         flex: 1,
-        padding: 15
+        backgroundColor: '#f0f0f0'
     },
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#f0f0f0',
     },
     header: {
         alignItems: 'center',
         padding: 20,
         borderBottomColor: 'grey',
         borderBottomWidth: 1,
+        backgroundColor:'#ffffff'
     },
     title: {
         fontSize: 24,
@@ -71,4 +92,20 @@ const styles = StyleSheet.create({
     carDetails: {
         marginBottom: 10,
     },
+    image: {
+        width: 150,
+        height: 150,
+        borderRadius: 75,
+        marginBottom: 20,
+    },
+    imagePlaceholder: {
+        width: 150,
+        height: 150,
+        borderRadius: 75,
+        marginBottom: 20,
+        backgroundColor: '#cccccc',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
 });

@@ -1,17 +1,18 @@
 
 import { useState } from 'react';
 import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert}from'react-native';
+import ScheduleLocation from './ScheduleLocation';
 
 
 
-function RegisterForm({ isLogin, onSubmit, credentialsInvalid={} }) {
+function RegisterForm({ navigation,isLogin, onSubmit, credentialsInvalid={} }) {
     const [firstName, setFirstName] = useState(''); 
     const [lastName, setLastName] = useState(''); 
     const [enteredEmail, setEnteredEmail] = useState(''); 
     const [enteredConfirmEmail, setEnteredConfirmEmail] = useState(''); 
     const [enteredPassword, setEnteredPassword] = useState('');
     const [enteredConfirmPassword, setEnteredConfirmPassword] = useState(''); 
-    const [isDriver,setIsDriver]=useState(`false`);
+    const [isDriver,setIsDriver]=useState(false);
     const [licensePlate, setLicensePlate] = useState('');
     const [driverLicense, setDriverLicense] = useState('');
     const [carModel, setCarModel] = useState('');
@@ -83,7 +84,11 @@ function submitHnadler(){
             carModel,
         };
     }
-    onSubmit(userData)
+    if(typeof onSubmit == 'function'){
+      onSubmit(userData);
+    }
+    navigation.navigate('ScheduleLocation',{userData})
+    
 }
 
    //

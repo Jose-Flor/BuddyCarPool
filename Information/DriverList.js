@@ -1,28 +1,13 @@
-import {FlatList, Pressable, View,Text,StyleSheet,Platform} from'react-native';
+import {FlatList, Pressable, View,Text,StyleSheet,Platform,Alert} from'react-native';
+import React,{useState,useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-class Drivers{
-    constructor(id,name,licenseNumber,isAvilable,pictureUrl,schedule){
-        this.id = id;
-        this.name = name;
-        this.licenseNumber = licenseNumber;
-        this.isAvilable = isAvilable;
-        this.pictureUrl = pictureUrl;
-        this.schedule = schedule;
-    }
-}
-const Category=[
-    new Drivers('1','Ali  ',' 22 ',true,'johnsample.jpg',' Available:Monday'),
-    new Drivers('2','John ','  ',true,'ali.jpg',' Available:Tuesday'),
-    new Drivers('3','John ','  ',true,'ali.jpg',' Available:Monday'),
-    new Drivers('4','Doe ','  ',true,'ali.jpg',' Available:Thursday'),
-    new Drivers('5','John ','  ',true,'ali.jpg',' Available:Friday'),
-    new Drivers('6','Doe ',' ',true,'ali.jpg',' Available:Monday'),
-];
+
 
 
 //using this function , make the entire function and use <GridTile/>
-function GridTile({name,schedule,licenseNumber,onPress}){
+function GridTile({name,Schedule,licenseNumber,onPress}){
     //we need to add ripple effect 
     return(
         <View style={styles.gridItem}>
@@ -31,7 +16,10 @@ function GridTile({name,schedule,licenseNumber,onPress}){
             onPress={onPress}
             >
                 <View style={styles.innerContainer}>
-                    <Text style={styles.Namesid}>{name}{schedule}{licenseNumber}</Text>
+                    <Text style={styles.Namesid}>{name}</Text>
+                    <Text style={styles.details}>Scheduel:{Schedule}</Text>
+                    <Text style={styles.details}>License:{licenseNumber}</Text>
+                    <Text></Text>
                 </View>
             </Pressable>
         </View>
@@ -43,28 +31,42 @@ function GridTile({name,schedule,licenseNumber,onPress}){
 
 //the list of drivers shows here 
 function Driverlist({navigation}){
-    function rendercategoryItem(itemData){
-        function HnadlerPress(){
-            navigation.navigate('DriverOverView');
-            }
-            return(
-                <GridTile 
-                name={itemData.item.name}
-                schedule={itemData.item.schedule}
-                licenseNumber={itemData.item.licenseNumber}
-                onPress={HnadlerPress}
-                
-                />
 
-            );
+    const [drivers,setDrivers]=useState([])
+    useEffect(() =>{
+        const loadDrivers=async()=>{
+            try{
+                const storedDrivers= await AsyncStorage.getItem('drivers');
+                if(storedDrivers !==null){
+                    const parseDrivers=JSON.parse(storedDrivers)
+                    setDrivers(parseDrivers);
+                }
+            }catch(error){
+                Alert.alert("Error","failed to load drivers");
+            }
+        };
+        loadDrivers();
+    },[]);
+    const handlePress=(driver)=>{
+        navigation.navigate('DriverOverView',{driverId:driver.id})
     }
 
 
-    return <FlatList 
-     data={Category} 
-     keyExtractor={(item)=>item.id } 
-     renderItem={rendercategoryItem}
-     numColumns={2} />;
+    return(
+     <FlatList 
+     data={drivers} 
+     keyExtractor={(item,index)=>`driver-${index}` } 
+     renderItem={({item})=>(
+       <GridTile
+       name={`${item.firstName} ${item.lastName}`}
+            Schedule={item.Schedule ? new Date(item.Schedule).toLocaleString() : 'Not scheduled'} // Format the schedule date
+            licenseNumber={item.licenseNumber}
+            onPress={() => handlePress(item)}
+       />
+     )}
+     numColumns={2} 
+     />
+     );
 }
 export default Driverlist;
 const styles = StyleSheet.create({
@@ -105,5 +107,8 @@ const styles = StyleSheet.create({
     driverOverView:{
         flex:1,
         padding:16,
-    }
+    },
+    details: {
+        fontSize: 12
+    },
 })
