@@ -11,7 +11,6 @@ function Drivers(){
         <Text> Full Name:{driverDetail.fullName}</Text>
         <Text>phone Number:{driverDetail.contactInformation.phoneNumber}</Text>
        
-
         <Text></Text>
         </View>
 
