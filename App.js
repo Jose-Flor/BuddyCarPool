@@ -7,11 +7,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import RegisterForm from './Screens /RegisterForm';
 import Driverlist from './Information/DriverList';
 import DriverOverView from './Information/DriverOverView';
-<<<<<<< HEAD
-import React, { useState, createContext, useContext, useEffect } from 'react';
-=======
+
 import ScheduleLocation from './Screens /ScheduleLocation';
->>>>>>> refs/remotes/origin/main
+
 
 const Stack=createNativeStackNavigator();
 
