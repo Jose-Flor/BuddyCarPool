@@ -1,4 +1,4 @@
-import { useState } from "react";
+gimport { useState } from "react";
 import {View,StyleSheet,TextInput,Button,Text,Alert,Image,TouchableOpacity,Modal,ScrollView,Switch}from'react-native'
 import DateTimePicker from'@react-native-community/datetimepicker'
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -86,7 +86,7 @@ function ScheduleLocation({route,navigation}){
         let currentLocation = await Location.getCurrentPositionAsync({});
         setLocation(currentLocation);
     };
-
+imageUrl
   
     const submitHandler = async() => {
         await getLocation ();
