@@ -86,8 +86,11 @@ function ScheduleLocation({route,navigation}){
 
     return(
         <View style={styles.container}>
-            <Text style={styles.label}>Schedule:</Text>
-            <Button title="Choose Date" onPress={() => setShowDatePicker(true)} />
+            <Text style={styles.label}>Schedule</Text>
+            <Text style={styles.sectionTitle}>Date:</Text>
+            <Button title="Choose Date" onPress={() => setShowDatePicker(true)} 
+             color="#007AFF" // Change the color as needed
+            />
             {showDatePicker && (
                 <DateTimePicker 
                 value={date} 
@@ -102,8 +105,10 @@ function ScheduleLocation({route,navigation}){
             )}
                         <Text style={styles.chosenDate}>Chosen Day: {formatDate(date)}</Text>
 
-             <Text style={styles.label}>Select Time:</Text>
-            <Button title="Choose Time" onPress={() => setShowTimePicker(true)} />
+             <Text style={styles.sectionTitle}>Select Time:</Text>
+            <Button title="Choose Time" onPress={() => setShowTimePicker(true)} 
+            color="#007AFF" // Change the color as needed
+            />
             {showTimePicker && (
                 <DateTimePicker
                     value={time}
@@ -117,8 +122,12 @@ function ScheduleLocation({route,navigation}){
             )}
                         <Text style={styles.chosenDate}>Chosen Time: {formatTime(time)}</Text>
 
-
-            <Text style={styles.label}>Zip Code:</Text>
+                       
+                       
+                       
+                       
+                        <Text style={styles.sectionTitle}>Location Information</Text>
+            <Text style={styles.sectionTitle}>Zip Code:</Text>
             <TextInput 
                 style={styles.input}
                 placeholder="Enter your zip code"
@@ -126,18 +135,23 @@ function ScheduleLocation({route,navigation}){
                 value={zipCode}
                 onChangeText={setzipCode}
             />
+              <Text style={styles.sectionTitle}>Profile Information</Text>
             <Button title="upload picture" onPress={handleImagePicker}/>
             {imageUri ? <Image source={{ uri: imageUri }} style={{ width: 100, height: 100 }} /> : null}
+            <Text style={styles.sectionTitle}>Bio:</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Enter a short bio"
                 value={bio}
                 onChangeText={setBio}
+                //multiline={true}
+                //numberOfLines={4}
             />
              <Button
                 title="Submit"
                 onPress={submitHandler}
                 color="#007AFF" // Adjust the color as needed
+                style={styles.button}
             />
 
         </View>
@@ -152,31 +166,42 @@ const styles=StyleSheet.create({
     container:{
        flex: 1,
        padding:20,
-       backgroundColor:'#f0f0f0'
+       backgroundColor:'#f94449' //eaeaea
     },
+    sectionTitle: {
+        fontSize: 15,
+        fontWeight: "bold",
+        marginBottom: 10,
+        color: "#333",
+      },
     label: {
-        fontSize: 18,
+        fontSize: 20,
         marginBottom: 8,
         fontWeight:'bold',
+        color: '#333', 
     },
     input: {
         borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
+        borderColor: '#FFF',
+        borderRadius: 8,
+        padding: 12,
         marginBottom: 15,
+        color:'#FFF',
     },
     submittedDataContainer: {
         marginTop: 20,
     },
     button: {
+        backgroundColor: 'white',
+        padding: 15,
+        borderRadius: 5,
+        alignItems: 'center',
         marginTop: 10,
-        color: '#007AFF', 
     },
     chosenDate: {
-        fontSize: 16,
+        fontSize: 15,
         marginBottom: 10,
-        color: 'blue', // Adjust the color as needed
+        color: '#333', 
     },
 
 })
