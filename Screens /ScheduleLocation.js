@@ -1,10 +1,22 @@
 import { useState } from "react";
-import {View,StyleSheet,TextInput,Button,Text,Alert}from'react-native'
+import {View,StyleSheet,TextInput,Button,Text,Alert,Image,TouchableOpacity,Modal,ScrollView,Switch}from'react-native'
 import DateTimePicker from'@react-native-community/datetimepicker'
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { launchImageLibrary } from "react-native-image-picker";
+import * as ImagePicker from'expo-image-picker';
 import React from "react";
+import * as FileSystem from 'expo-file-system';
+import * as Location from 'expo-location';
+import { Picker } from '@react-native-picker/picker';
 
+
+
+function CustomButton({ title, onPress, color }) {
+    return (
+        <TouchableOpacity onPress={onPress} style={[styles.button, { backgroundColor: color }]}>
+            <Text style={styles.buttonText}>{title}</Text>
+        </TouchableOpacity>
+    );
+}
 
 function ScheduleLocation({route,navigation}){
     const [date,setDate]=useState(new Date());
@@ -13,12 +25,49 @@ function ScheduleLocation({route,navigation}){
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [bio,setBio]=useState('');
-    const[imageUri,setImageUri] = useState('')
+    const[imageUri,setImageUri] = useState(null)
     const [location,setLocation] = useState(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedDays, setSelectedDays] = useState({
+        Monday: false,
+        Tuesday: false,
+        Wednesday: false,
+        Thursday: false,
+        Friday: false
+    });
+    const toggleDay = (day) => {
+        setSelectedDays({ ...selectedDays, [day]: !selectedDays[day] });
+    };
+
+    const handleSubmitDays = () => {
+        setIsModalVisible(false);
+        // Process selected days or pass them to another function
+    };
+    const renderDaySwitches = () => {
+        return Object.keys(selectedDays).map((day) => (
+            <View key={day} style={styles.daySwitchContainer}>
+                <Text style={styles.dayLabel}>{day}</Text>
+                <Switch
+                    onValueChange={() => toggleDay(day)}
+                    value={selectedDays[day]}
+                />
+            </View>
+        ));
+    };
     
+    const formatSelectedDays = () => {
+        const days = Object.entries(selectedDays)
+            .filter(([day, isSelected]) => isSelected)
+            .map(([day]) => day);
+        return days.join(', '); // Join selected days with a comma
+    };
+
+
+
 
   
     const userData=route.params?.userData;
+    
 
     const formatDate = (date) => {
         return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
@@ -26,27 +75,21 @@ function ScheduleLocation({route,navigation}){
     const formatTime = (time) => {
         return `${time.getHours()}:${time.getMinutes().toString().padStart(2, '0')}`;
     };
-    const handleImagePicker=()=>{
-        const options={
-            storageOption:{
-                skipBackup:true,
-                path:'images'
-            },
-        };
-        launchImageLibrary(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else {
-                const source = { uri: response.uri };
-                setImageUri(source.uri);
-            }
-        });
 
+    const getLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permission to access location was denied');
+            return;
+        }
 
-    }
+        let currentLocation = await Location.getCurrentPositionAsync({});
+        setLocation(currentLocation);
+    };
+
+  
     const submitHandler = async() => {
+        await getLocation ();
         const ScheduleDate=new Date(
         date.getFullYear(),
         date.getMonth(),
@@ -55,55 +98,117 @@ function ScheduleLocation({route,navigation}){
         time.getMinutes(),
 
         );
+      
+
+     
+        const daysArray = Object.keys(selectedDays).filter(day => selectedDays[day]);
+
 
         const updatedUserData = {
             ...userData,
             Schedule:ScheduleDate.toISOString(),
             zipCode,
             bio,
-            pictureUrl:imageUri,
+            imageUri,//permission for pictures 
+           
+            selectedDays: daysArray
         };
-        try{
-            const exsitingData =await AsyncStorage.getItem('drivers');
-            let newDriverList=exsitingData ? JSON.parse(exsitingData):[]
-            newDriverList.push(updatedUserData)
-
-            await AsyncStorage.setItem('drivers',JSON.stringify(newDriverList));
+        try {
+            const existingData = await AsyncStorage.getItem('drivers');
+            let newDriverList = existingData ? JSON.parse(existingData) : [];
+            newDriverList.push(updatedUserData);
+            await AsyncStorage.setItem('drivers', JSON.stringify(newDriverList));
             Alert.alert("Welcome to CarpoolBuddy");
             navigation.navigate('DriverList');
-        }catch(error){
-            console.error('Erorr saving date',error);
-            Alert.alert("Error","failed to save data")
+          } catch (error) {
+            console.error('Error saving data', error);
+            Alert.alert("Error", "Failed to save data");
+          }
+        
+    };
+    const handleImagePicker = async () => {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (permissionResult.granted === false) {
+            Alert.alert('Permission to access camera roll is required!');
+            return;
         }
 
+        const pickerResult = await ImagePicker.launchImageLibraryAsync();
+        if (pickerResult.canceled) {
+            return;
+        }
+        if (pickerResult.assets && pickerResult.assets.length > 0) {
+            const localUri = pickerResult.assets[0].uri;
+            const filename = localUri.split('/').pop();
+    
+            // Use a file path like `FileSystem.documentDirectory` to store the image locally
+            const localFileUri = `${FileSystem.documentDirectory}${filename}`;
+    
+            try {
+                await FileSystem.copyAsync({
+                    from: localUri,
+                    to: localFileUri
+                });
+                setImageUri(localFileUri);
+            } catch (err) {
+                console.error('Error saving the image locally', err);
+            }
+        } else {
+            console.warn("No image was selected");
+        }
 
         
     };
+    const handleDateChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShowDatePicker(Platform.OS === 'ios');
     
+        // Check if the selected date is Saturday (6) or Sunday (0)
+        if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+            Alert.alert("Invalid Date", "Please choose a date from Monday to Friday.");
+        } else {
+            setDate(currentDate);
+        }
+    };
 
 
 
 
     return(
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.label}>Schedule:</Text>
-            <Button title="Choose Date" onPress={() => setShowDatePicker(true)} />
+            <CustomButton title="Choose Date" onPress={() => setShowDatePicker(true)} color="#007AFF" />
+
             {showDatePicker && (
                 <DateTimePicker 
                 value={date} 
                 mode='date' 
-                
-                onChange={(event, selectedDate) => {
-                    const currentDate=selectedDate || date;
-                    setShowDatePicker(Platform.OS === 'ios');
-                    setDate(currentDate)
-                }}
+                onChange={handleDateChange}
                 />
             )}
-                        <Text style={styles.chosenDate}>Chosen Day: {formatDate(date)}</Text>
+            <Text style={styles.chosenDate}>Chosen Day: {formatDate(date)}</Text>
+
+            <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.button}>
+                <Text style={styles.buttonText}>Select Days</Text>
+            </TouchableOpacity>
+            
+            <Modal
+                visible={isModalVisible}
+                transparent={true}
+                animationType="slide"
+            >
+                <View style={styles.modalView}>
+                    <ScrollView>
+                        {renderDaySwitches()}
+                    </ScrollView>
+                    <CustomButton title="Submit" onPress={handleSubmitDays} color="#007AFF" />
+                </View>
+            </Modal>
+            <Text style={styles.selectedDaysText}>Chosen Days: {formatSelectedDays()}</Text>
+
 
              <Text style={styles.label}>Select Time:</Text>
-            <Button title="Choose Time" onPress={() => setShowTimePicker(true)} />
+             <CustomButton title="Choose Time" onPress={() => setShowTimePicker(true)} color="#007AFF" />
             {showTimePicker && (
                 <DateTimePicker
                     value={time}
@@ -115,7 +220,8 @@ function ScheduleLocation({route,navigation}){
                     }}
                 />
             )}
-                        <Text style={styles.chosenDate}>Chosen Time: {formatTime(time)}</Text>
+
+          <Text style={styles.chosenDate}>Chosen Time: {formatTime(time)}</Text>
 
 
             <Text style={styles.label}>Zip Code:</Text>
@@ -126,21 +232,22 @@ function ScheduleLocation({route,navigation}){
                 value={zipCode}
                 onChangeText={setzipCode}
             />
-            <Button title="upload picture" onPress={handleImagePicker}/>
-            {imageUri ? <Image source={{ uri: imageUri }} style={{ width: 100, height: 100 }} /> : null}
+            <CustomButton title="Upload Picture" onPress={handleImagePicker} color="#007AFF" />
+            {imageUri ?<Image source={{ uri: imageUri }} style={styles.image} />: null} 
             <TextInput
                 style={styles.input}
                 placeholder="Enter a short bio"
                 value={bio}
                 onChangeText={setBio}
             />
-             <Button
-                title="Submit"
-                onPress={submitHandler}
-                color="#007AFF" // Adjust the color as needed
-            />
+           <CustomButton title="Submit" onPress={submitHandler} color="#007AFF" />
 
-        </View>
+           <CustomButton title="Fetch Location" onPress={getLocation} color="#007AFF" />
+            {location && (
+                <Text>Location: Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}</Text>
+            )}
+
+        </ScrollView>
 
 
 
@@ -152,7 +259,7 @@ const styles=StyleSheet.create({
     container:{
        flex: 1,
        padding:20,
-       backgroundColor:'#f0f0f0'
+       backgroundColor:'#f94449'
     },
     label: {
         fontSize: 18,
@@ -170,13 +277,71 @@ const styles=StyleSheet.create({
         marginTop: 20,
     },
     button: {
-        marginTop: 10,
-        color: '#007AFF', 
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginBottom: 15,
+        backgroundColor: '#007AFF',
     },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+
+
     chosenDate: {
         fontSize: 16,
         marginBottom: 10,
         color: 'blue', // Adjust the color as needed
     },
+    image: {
+        width: 100, // Adjust as needed
+        height: 100, // Adjust as needed
+       
+    },
+    picker: {
+        height: 50,
+        width: "100%",
+       
+    },
+    pickerContainer: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        marginBottom: 15,
+    },
+    modalView: {
+        marginTop:100,
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        padding: 20,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    daySwitchContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    dayLabel: {
+        fontSize: 18,
+    },
+    selectedDaysText: {
+        fontSize: 16,
+        color: 'blue',
+        marginBottom: 10,
+        fontWeight:'bold'
+    },
+ 
+
 
 })

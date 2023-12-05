@@ -1,7 +1,8 @@
 
 import { useState } from 'react';
-import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert}from'react-native';
+import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert,KeyboardAvoidingView, Modal}from'react-native';
 import ScheduleLocation from './ScheduleLocation';
+import {Picker, picker} from "@react-native-picker/picker"
 
 
 
@@ -16,6 +17,33 @@ function RegisterForm({ navigation,isLogin, onSubmit, credentialsInvalid={} }) {
     const [licensePlate, setLicensePlate] = useState('');
     const [driverLicense, setDriverLicense] = useState('');
     const [carModel, setCarModel] = useState('');
+    const [carType,setCarType] = useState('');
+    const [passengerLimit,setPassengerLimit] = useState(0); 
+    const [isPickerVisible, setIsPickerVisible] = useState(false);
+    const handleCarTypeChange=(selectedCarType)=>{
+      setCarType(selectedCarType);
+      setPassengerLimit(selectedCarType ==='Sedan'? 2 : 3 );
+      setIsPickerVisible(false);
+    }
+    const togglePicker = () => {
+      setIsPickerVisible(!isPickerVisible);
+  };
+    const carTypes=[
+      {
+        label:'Sedan',value:'Sedan'},
+        {label:'Van',value:'Van'}
+    ];
+    function rendercars(){
+  return carTypes.map((type, index) => (
+    <TouchableOpacity 
+      key={index}
+      style={style.carTypeOption}
+      onPress={() => handleCarTypeChange(type.value)}
+    >
+      <Text style={{ color: '#333' }}>{type.label}</Text> {/* Ensure text color contrasts with background */}
+    </TouchableOpacity>
+  ));
+}
     const {
       email: emailIsInvalid, 
       confirmEmail: emailsDontMatch,
@@ -76,12 +104,17 @@ function submitHnadler(){
         email: enteredEmail,
         password: enteredPassword,
         isDriver, // this assumes you have a way to set 'isDriver' in your state
+        carType,
+        carModel,
+        passengerLimit
     };
     if (isDriver) {
         userData.driverInfo = {
             licensePlate,
             driverLicense,
             carModel,
+            carType,
+            passengerLimit
         };
     }
     if(typeof onSubmit == 'function'){
@@ -94,6 +127,10 @@ function submitHnadler(){
    //
   
    return (
+    <KeyboardAvoidingView 
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    style={style.container}
+    >
     <ScrollView style={style.container}>
        <Text style={style.Header}>What is you name </Text>
        <View style={style.SubHeader}> 
@@ -145,8 +182,38 @@ function submitHnadler(){
             value={carModel}
             style={style.inputContainer}
           />
+          {isDriver && (
+        <View>
+            <TouchableOpacity onPress={togglePicker}>
+                <Text style={style.inputContainer}>Select your car type</Text>
+            </TouchableOpacity>
+            {isPickerVisible && (
+              
+
+                <Picker
+                    selectedValue={carType}
+                    onValueChange={(itemValue, itemIndex) => handleCarTypeChange(itemValue)}
+                    style={{width:'100%',backgroundColor:'white'}}
+                    >
+                    <Picker.Item label="Select Car Type" value=""/>
+                    {carTypes.map((type) => (
+              <Picker.Item key={type.value} label={type.label} value={type.value} />
+            ))}
+                </Picker>
+            
+            )}
+        </View>
+    )}
         </>
       )}
+      {isDriver && carType &&(
+        <Text>Passenger Limit:{passengerLimit}</Text>
+      )}
+      {carType !== '' && (
+    <View style={style.carTypeContainer}>
+        <Text style={style.CarTypeText}>Selected Car Type: {carType}</Text>
+    </View>
+)}
         <View>
 
        <Text style={[style.label,emailIsInvalid && style.labelIsInvalid]}>Email Address</Text>
@@ -219,6 +286,7 @@ function submitHnadler(){
        <TextInput/>
 
        </ScrollView>
+       </KeyboardAvoidingView>
 
     
 
@@ -282,7 +350,30 @@ const style=StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingVertical: 10,
-    }
-    
+    },
+    carTypeOption:{
+      padding:10,
+      backgroundColor:'#f0f0f0',
+      borderBottomWidth:1,
+      borderBottomColor:'#ddd'
+    },
+    CarTypeText:{
+      fontSize:16,
+      color:'#333',
+    },
+    carTypeContainer: {
+      backgroundColor: '#f7f7f7',
+      padding: 10,
+      marginVertical: 10,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: '#ddd',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      elevation: 2,
+      alignItems: 'center',
+    },
         
     })
