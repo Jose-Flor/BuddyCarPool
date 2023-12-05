@@ -10,7 +10,6 @@ import DriverOverView from './Information/DriverOverView';
 
 import ScheduleLocation from './Screens /ScheduleLocation';
 
-
 const Stack=createNativeStackNavigator();
 
 export default function App() {

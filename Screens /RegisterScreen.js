@@ -29,11 +29,11 @@ function RegisterScreen({navigation}){
         </View>
         </View>
         <View style={styles.inputContainer}>
-            <TextInput style={styles.TextInput} placeholder="CSUN Email"/>
+            <TextInput style={styles.TextInput} placeholder="CSUN Email"  placeholderTextColor="darkgrey"/>
 
         </View>
         <View style={styles.inputContainer}>
-            <TextInput  style={styles.TextInput} placeholder="Password" secureTextEntry={true}/>
+            <TextInput  style={styles.TextInput} placeholder="Password" placeholderTextColor="darkgrey" secureTextEntry={true} />
         </View>
         
         
@@ -42,15 +42,15 @@ function RegisterScreen({navigation}){
         style={styles.customButton}
         onPress={handleSignIn}
         >
-        <Text style={styles.buttonText} >Sign In</Text>
+        <Text style={styles.buttonText} >Log In</Text>
       </TouchableOpacity>
         </View>
-        
+        <Text style={styles.additionalText}>Don't have an account?</Text>
         <TouchableOpacity
-        style={styles.customButton}
+        style={styles.customButton2}
         onPress={handleRegister}
         >
-        <Text style={styles.buttonText} >Register</Text>
+        <Text style={styles.buttonText2} >Register</Text>
       </TouchableOpacity>
       <View style={styles.image2}>
      <Image
@@ -71,8 +71,8 @@ const styles=StyleSheet.create({
       flex:1,
       justifyContent: 'center',
       alignItems: 'center',
-      padding:50
-    
+      padding:50,
+      
     },
     
     dummyText:{
@@ -96,32 +96,44 @@ const styles=StyleSheet.create({
     customButton: {
           backgroundColor: 'black', 
           padding: 10, 
-          borderRadius: 5,
+          borderRadius: 10,
+          marginTop: 'none',
         },
         
     buttonText:{
-        textDecorationStyle: 'none',
+        
         color: 'white',
         fontSize: 15,
+        textAlign: 'center',
+    },
+
+    buttonText2:{
+        
+        color: 'red',
+        fontSize: 15,
+        textAlign: 'center',
     },
 
     buttonscontainer: {
         marginTop: 50,
         padding: 10,
+        width: '90%',
+        borderRadius: 55,
     },
 
     inputContainer:{
         alignItems: 'center',
         width:'100%',
         padding:5,
-    
-      
+       
     },
     TextInput:{
-     borderWidth:1,
-     padding:10,
+     
+     borderRadius: 10,
+     padding:15,
      marginVertical:10,
-     width:'100%'
+     width:'100%',
+     backgroundColor: '#ECECEC',
     },
     titleText:{
         fontStyle:'italic',
