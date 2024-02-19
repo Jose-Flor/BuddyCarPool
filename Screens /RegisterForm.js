@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert,KeyboardAvoidingView, Modal}from'react-native';
 import ScheduleLocation from './ScheduleLocation';
-import {Picker, picker} from "@react-native-picker/picker"
+import {Picker} from '@react-native-picker/picker'
 
 
 
