@@ -2,7 +2,8 @@ import { useState } from 'react';
 import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert,KeyboardAvoidingView, Platform, Modal}from'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ScheduleLocation from './ScheduleLocation';
-import {Picker} from '@react-native-picker/picker'
+import {Picker, picker} from "@react-native-picker/picker"
+import axios from 'axios'
 
 
 
@@ -117,14 +118,24 @@ function submitHnadler(){
             passengerLimit
         };
     }
-    if(typeof onSubmit == 'function'){
-      onSubmit(userData);
-    }
-    navigation.navigate('ScheduleLocation',{userData})
-    
+    //api end points
+    axios.post('http://10.0.2.2:5000/register', userData)
+      .then(response => {
+        console.log('Registration successful:', response.data);
+        if (typeof onSubmit === 'function') {
+          onSubmit(userData, response.data); // Optional callback
+        }
+        navigation.navigate('ScheduleLocation', {  userData });
+      })
+      .catch(error => {
+        console.error('Registration failed:', error);
+        Alert.alert('Registration Failed', 'Failed to register. Please try again.');
+      });
+
+   
 }
 
-   //
+  
   
    return (
     <KeyboardAvoidingView 
@@ -366,11 +377,9 @@ export default RegisterForm;
 const style=StyleSheet.create({
 
     container:{
-      flex:1,
-      padding:20,
-      backgroundColor:'#EEF2F8',
-      marginTop: -10, // Adjust this value 
-       
+        flex:1,
+        padding:20 ,
+        backgroundColor:'#f94449',
     },
      Header:{
         fontSize:26,

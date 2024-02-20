@@ -7,7 +7,7 @@ import React from "react";
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import { Picker } from '@react-native-picker/picker';
-
+import axios from 'axios'
 
 
 function CustomButton({ title, onPress, color }) {
@@ -86,7 +86,7 @@ function ScheduleLocation({route,navigation}){
         let currentLocation = await Location.getCurrentPositionAsync({});
         setLocation(currentLocation);
     };
-imageUrl
+
   
     const submitHandler = async() => {
         await getLocation ();
@@ -113,6 +113,20 @@ imageUrl
            
             selectedDays: daysArray
         };
+        try {
+            const response = await axios.post('http://localhost:5000/schedule', updatedUserData);
+            if (response.status === 201) {
+                // Handle success
+                Alert.alert("Schedule Added", "Your schedule has been successfully added.");
+                navigation.navigate('MainScreen');
+            } else {
+                // Handle any other HTTP status code
+                Alert.alert("Error", "There was a problem adding your schedule.");
+            }
+        } catch (error) {
+            console.error('Error submitting schedule:', error);
+            Alert.alert("Error", "Failed to submit schedule.");
+        }
         try {
             const existingData = await AsyncStorage.getItem('drivers');
             let newDriverList = existingData ? JSON.parse(existingData) : [];
@@ -246,6 +260,7 @@ imageUrl
                 //multiline={true}
                 //numberOfLines={4}
             />
+
            <CustomButton title="Submit" onPress={submitHandler} color="#007AFF" />
 
            <CustomButton title="Fetch Location" onPress={getLocation} color="#007AFF" />
