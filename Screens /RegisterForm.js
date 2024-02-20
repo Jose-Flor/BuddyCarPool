@@ -118,19 +118,19 @@ function submitHnadler(){
             passengerLimit
         };
     }
-    // api end points
-    // axios.post('http://10.0.2.2:5000/register', userData)
-    //   .then(response => {
-    //     console.log('Registration successful:', response.data);
-    //     if (typeof onSubmit === 'function') {
-    //       onSubmit(userData, response.data); // Optional callback
-    //     }
+    //api end points
+    axios.post('http://10.0.2.2:5000/register', userData)
+      .then(response => {
+        console.log('Registration successful:', response.data);
+        if (typeof onSubmit === 'function') {
+          onSubmit(userData, response.data); // Optional callback
+        }
         navigation.navigate('ScheduleLocation', {  userData });
-    //   })
-    //   .catch(error => {
-    //     console.error('Registration failed:', error);
-    //     Alert.alert('Registration Failed', 'Failed to register. Please try again.');
-    //   });
+      })
+      .catch(error => {
+        console.error('Registration failed:', error);
+        Alert.alert('Registration Failed', 'Failed to register. Please try again.');
+      });
 
    
 }
@@ -310,7 +310,7 @@ const style=StyleSheet.create({
 
     container:{
         flex:1,
-        padding:20,
+        padding:20 ,
         backgroundColor:'#f94449',
     },
     Header:{
