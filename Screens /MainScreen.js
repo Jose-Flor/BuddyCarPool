@@ -1,28 +1,26 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { Text, View,Modal,Button } from "react-native";
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { Text, View, Modal, Button } from "react-native";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Drivers from "./Drivers";
 import Messages from "./Messages";
 import maps from "./Map";
 import { GStyle } from "./General style/GStyle";
-import {Ionicons} from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Driverlist from "../Information/DriverList";
 import IconButton from "./General style/IconButton";
 import DriverFilter from "../Information/Filters";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
-import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const BottomTabs=createBottomTabNavigator();
-function profileScreen({navigation }){
+const BottomTabs = createBottomTabNavigator();
+function profileScreen({ navigation }) {
     return (
         <View>
-            <Text>this is profile screen </Text>
+            <Text>Your profile content goes here</Text>
         </View>
-
     );
 }
-function filterHnadling ({navigation}){
+function filterHandling({ navigation }) {
     return (
         <View>
             <Text>this is filter</Text>
@@ -30,51 +28,56 @@ function filterHnadling ({navigation}){
         </View>
     );
 }
-function TabsOverview({setIsFilterModalVisible,filteredDrivers}){
+function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
     return (
-    
-         <BottomTabs.Navigator 
-         initialRouteName="DriverList"
-         screenOptions={({navigation}) =>({
-            
-            headerStyle:{backgroundColor:GStyle.colors.bottmbTabs},
-            
-            headerTintColor:"white",
-            tabBarStyle:{backgroundColor:GStyle.colors.bottmbTabs},
-            tabBarActiveBackgroundColor:GStyle.colors.BottomTabsActive,
-            
-            headerRight:()=><IconButton icon='menu' size={24} color='white' onPress={()=>{navigation.navigate('')}}/>,
-            headerLeft:()=><IconButton icon='funnel' size={22} color='white' onPress={()=>setIsFilterModalVisible(true)}/>
-            
-         })}>
-             <BottomTabs.Screen
-        name="Driver"
-        component={Driverlist}
-        initialParams={{  filteredDrivers }}
-        options={{
-          title: "Recent Driver",
-          tabBarLabel: "Recent",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="car" size={size} color={color} />
-          ),
-        }}
-      />
+
+        <BottomTabs.Navigator
+            initialRouteName="DriverList"
+            screenOptions={({ navigation }) => ({
+
+                headerStyle: { backgroundColor: GStyle.colors.bottmbTabs },
+
+                headerTintColor: "white",
+                tabBarStyle: { backgroundColor: GStyle.colors.bottmbTabs },
+                tabBarActiveBackgroundColor: GStyle.colors.BottomTabsActive,
+
+                headerRight: () => <IconButton icon='menu' size={24} color='white' onPress={() => { navigation.navigate('') }} />,
+                headerLeft: () => <IconButton icon='funnel' size={22} color='white' onPress={() => setIsFilterModalVisible(true)} />
+
+            })}>
+            <BottomTabs.Screen
+                name="Driver"
+                component={Driverlist}
+                initialParams={{ filteredDrivers }}
+                options={{
+                    title: "Recent Driver",
+                    tabBarLabel: "Recent",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="car" size={size} color={color} />
+                    ),
+                }}
+            />
             <BottomTabs.Screen name="Messages" component={Messages}
-             options={{
-                title:'Messages',
-                tabBarLabel:'Messages',
-                tabBarIcon:({color,size})=><Ionicons name='paper-plane' size={size} color={color}/>
+                options={{
+                    title: 'Messages',
+                    tabBarLabel: 'Messages',
+                    tabBarIcon: ({ color, size }) => <Ionicons name='paper-plane' size={size} color={color} />
 
 
-            }} />
-            <BottomTabs.Screen name="maps" component={maps} 
-            options={{
-                title:'Maps',
-                tabBarLabel:'Maps',
-                tabBarIcon:({color,size})=><Ionicons name='map' size={size} color={color}/>
-            }}/>
-
-    </BottomTabs.Navigator>
+                }} />
+            <BottomTabs.Screen name="maps" component={maps}
+                options={{
+                    title: 'Maps',
+                    tabBarLabel: 'Maps',
+                    tabBarIcon: ({ color, size }) => <Ionicons name='map' size={size} color={color} />
+                }} />
+            <BottomTabs.Screen name="Profile" component={profileScreen}
+                options={{
+                    title: 'Profile',
+                    tabBarLabel: 'Profile',
+                    tabBarIcon: ({ color, size }) => <Ionicons name='person' size={size} color={color} />
+                }} />
+        </BottomTabs.Navigator>
 
     );
 }
@@ -85,11 +88,6 @@ function MainScreen() {
     const [filteredDrivers, setFilteredDrivers] = useState([]);
     const [selectedDay, setSelectedDay] = useState('Monday');
 
-
-
-    
-
-   
     const filterDrivers = (drivers, day) => {
         if (day) {
             const newFilteredDrivers = drivers.filter(driver =>
@@ -97,7 +95,7 @@ function MainScreen() {
             );
             setFilteredDrivers(newFilteredDrivers);
         } else {
-            setFilteredDrivers(drivers); // Show all drivers if no day is selected
+            setFilteredDrivers(drivers);
         }
     };
 
@@ -108,7 +106,8 @@ function MainScreen() {
                 if (storedDrivers !== null) {
                     const drivers = JSON.parse(storedDrivers);
                     setAllDrivers(drivers);
-                    filterDrivers(drivers, 'Monday'); // Apply initial filter
+                    console.log('All drivers', drivers)
+                    filterDrivers(drivers, 'Monday');
                 }
             } catch (error) {
                 console.error('Error fetching drivers:', error);
@@ -121,20 +120,12 @@ function MainScreen() {
         filterDrivers(allDrivers, selectedDay);
     }, [selectedDay, allDrivers]);
 
-
-
-
-
     return (
         <View style={{ flex: 1 }}>
-            {/* Render the TabsOverview and pass necessary props */}
-            <TabsOverview 
-    setIsFilterModalVisible={setIsFilterModalVisible} 
-    filteredDrivers={filteredDrivers}
-/>
-
-
-            {/* Modal for driver filter */}
+            <TabsOverview
+                setIsFilterModalVisible={setIsFilterModalVisible}
+                filteredDrivers={filteredDrivers}
+            />
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -142,18 +133,16 @@ function MainScreen() {
                 onRequestClose={() => setIsFilterModalVisible(false)}
             >
                 <DriverFilter
-                   selectedDay={selectedDay}
-                   setSelectedDay={(day) => {
-                       setSelectedDay(day);
-                       setIsFilterModalVisible(false); // Close modal when day is selected
-                       filterDrivers(allDrivers, day); // Update the filtered drivers
+                    selectedDay={selectedDay}
+                    setSelectedDay={(day) => {
+                        setSelectedDay(day);
+                        setIsFilterModalVisible(true);
+                        filterDrivers(allDrivers, day);
                     }}
                     onClose={() => setIsFilterModalVisible(false)}
                 />
             </Modal>
         </View>
     );
-
-    
 }
 export default MainScreen;

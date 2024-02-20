@@ -1,4 +1,4 @@
-gimport { useState } from "react";
+import { useState } from "react";
 import {View,StyleSheet,TextInput,Button,Text,Alert,Image,TouchableOpacity,Modal,ScrollView,Switch}from'react-native'
 import DateTimePicker from'@react-native-community/datetimepicker'
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -7,7 +7,7 @@ import React from "react";
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import { Picker } from '@react-native-picker/picker';
-
+import axios from 'axios'
 
 
 function CustomButton({ title, onPress, color }) {
@@ -86,7 +86,7 @@ function ScheduleLocation({route,navigation}){
         let currentLocation = await Location.getCurrentPositionAsync({});
         setLocation(currentLocation);
     };
-imageUrl
+
   
     const submitHandler = async() => {
         await getLocation ();
@@ -113,6 +113,20 @@ imageUrl
            
             selectedDays: daysArray
         };
+        // try {
+        //     const response = await axios.post('http://localhost:5000/schedule', updatedUserData);
+        //     if (response.status === 201) {
+        //         // Handle success
+        //         Alert.alert("Schedule Added", "Your schedule has been successfully added.");
+        //         navigation.navigate('MainScreen');
+        //     } else {
+        //         // Handle any other HTTP status code
+        //         Alert.alert("Error", "There was a problem adding your schedule.");
+        //     }
+        // } catch (error) {
+        //     console.error('Error submitting schedule:', error);
+        //     Alert.alert("Error", "Failed to submit schedule.");
+        // }
         try {
             const existingData = await AsyncStorage.getItem('drivers');
             let newDriverList = existingData ? JSON.parse(existingData) : [];
@@ -175,19 +189,10 @@ imageUrl
 
 
     return(
-<<<<<<< HEAD
-        <View style={styles.container}>
-            <Text style={styles.label}>Schedule</Text>
-            <Text style={styles.sectionTitle}>Date:</Text>
-            <Button title="Choose Date" onPress={() => setShowDatePicker(true)} 
-             color="#007AFF" // Change the color as needed
-            />
-=======
         <ScrollView style={styles.container}>
             <Text style={styles.label}>Schedule:</Text>
             <CustomButton title="Choose Date" onPress={() => setShowDatePicker(true)} color="#007AFF" />
 
->>>>>>> 6d00de2cf85b67469e08503014a9c6aedef52a8e
             {showDatePicker && (
                 <DateTimePicker 
                 value={date} 
@@ -216,15 +221,8 @@ imageUrl
             <Text style={styles.selectedDaysText}>Chosen Days: {formatSelectedDays()}</Text>
 
 
-<<<<<<< HEAD
-             <Text style={styles.sectionTitle}>Select Time:</Text>
-            <Button title="Choose Time" onPress={() => setShowTimePicker(true)} 
-            color="#007AFF" // Change the color as needed
-            />
-=======
              <Text style={styles.label}>Select Time:</Text>
              <CustomButton title="Choose Time" onPress={() => setShowTimePicker(true)} color="#007AFF" />
->>>>>>> 6d00de2cf85b67469e08503014a9c6aedef52a8e
             {showTimePicker && (
                 <DateTimePicker
                     value={time}
@@ -252,15 +250,8 @@ imageUrl
                 value={zipCode}
                 onChangeText={setzipCode}
             />
-<<<<<<< HEAD
-              <Text style={styles.sectionTitle}>Profile Information</Text>
-            <Button title="upload picture" onPress={handleImagePicker}/>
-            {imageUri ? <Image source={{ uri: imageUri }} style={{ width: 100, height: 100 }} /> : null}
-            <Text style={styles.sectionTitle}>Bio:</Text>
-=======
             <CustomButton title="Upload Picture" onPress={handleImagePicker} color="#007AFF" />
             {imageUri ?<Image source={{ uri: imageUri }} style={styles.image} />: null} 
->>>>>>> 6d00de2cf85b67469e08503014a9c6aedef52a8e
             <TextInput
                 style={styles.input}
                 placeholder="Enter a short bio"
@@ -269,21 +260,13 @@ imageUrl
                 //multiline={true}
                 //numberOfLines={4}
             />
-<<<<<<< HEAD
-             <Button
-                title="Submit"
-                onPress={submitHandler}
-                color="#007AFF" // Adjust the color as needed
-                style={styles.button}
-            />
-=======
+
            <CustomButton title="Submit" onPress={submitHandler} color="#007AFF" />
 
            <CustomButton title="Fetch Location" onPress={getLocation} color="#007AFF" />
             {location && (
                 <Text>Location: Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}</Text>
             )}
->>>>>>> 6d00de2cf85b67469e08503014a9c6aedef52a8e
 
         </ScrollView>
 
@@ -297,11 +280,7 @@ const styles=StyleSheet.create({
     container:{
        flex: 1,
        padding:20,
-<<<<<<< HEAD
-       backgroundColor:'#f94449' //eaeaea
-=======
        backgroundColor:'#f94449'
->>>>>>> 6d00de2cf85b67469e08503014a9c6aedef52a8e
     },
     sectionTitle: {
         fontSize: 15,
@@ -327,13 +306,6 @@ const styles=StyleSheet.create({
         marginTop: 20,
     },
     button: {
-<<<<<<< HEAD
-        backgroundColor: 'white',
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginTop: 10,
-=======
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
@@ -343,7 +315,6 @@ const styles=StyleSheet.create({
     buttonText: {
         color: 'white',
         fontSize: 16,
->>>>>>> 6d00de2cf85b67469e08503014a9c6aedef52a8e
     },
 
 
