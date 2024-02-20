@@ -1,6 +1,6 @@
-
 import { useState } from 'react';
-import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert,KeyboardAvoidingView, Modal}from'react-native';
+import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert,KeyboardAvoidingView, Platform, Modal}from'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import ScheduleLocation from './ScheduleLocation';
 import {Picker} from '@react-native-picker/picker'
 
@@ -131,28 +131,67 @@ function submitHnadler(){
     behavior={Platform.OS === "ios" ? "padding" : "height"}
     style={style.container}
     >
-    <ScrollView style={style.container}>
-       <Text style={style.Header}>What is you name </Text>
-       <View style={style.SubHeader}> 
-       </View>
-        <Text>Name</Text>
+    <ScrollView style={style.container }>
+    
+
+
+
+
+
+
+
+
+
+       <Text style={style.Header}>Create Account</Text>
+
+       <TouchableOpacity onPress={() => handleIconButtonPress()}>
+  <View style={style.circleIcon}>
+    <View style={style.circleBackground}>
+      <Ionicons name="ios-person" size={55} color="#636363" />
+    </View>
+  </View>
+</TouchableOpacity>
+<View style={style.SubHeader}>
+  {/* Your SubHeader content here */}
+</View>
+
+<View style={style.uploadProfileContainer}>
+  <Text style={{ fontSize: 13, marginBottom: 10, color: 'black' }}>Upload Profile Picture</Text>
+</View>
+        
+
+        <View style={style.uploadProfileContainer}>
+        {/*<Text style={{ fontSize: 13, marginBottom: 10, color: 'black' }}>Upload Profile Picture</Text>*/}
+        </View>
+
         <TextInput 
         
         autoCapitalize='none'
-        placeholder="Enter your name"
+        placeholder="First Name"
+        placeholderTextColor="#bcbcbc"  
         onChangeText={(text) => updateInputValueHnadler('firstName', text)}
         value={firstName}
-        style={style.inputContainer}
+        style={{
+          ...style.inputContainer,
+          backgroundColor: 'white', 
+          color: 'black',
+          
+        }}
         
         
         />
-        <Text>LastName</Text>
-        <TextInput
+         {/* <Text>LastName</Text>*/ }
+         <TextInput
         autoCapitalize='none'
-        placeholder="Enter your Last name"
+        placeholder="Last Name"
+        placeholderTextColor="#bcbcbc"  
         onChangeText={(text) => updateInputValueHnadler('lastName',text)}
         value={lastName}
-        style={style.inputContainer}
+        style={{
+          ...style.inputContainer,
+          backgroundColor: 'white', 
+          color: 'black',
+        }}
 
         />
          <View style={style.switchContainer}>
@@ -166,26 +205,38 @@ function submitHnadler(){
         <>
           <TextInput
             placeholder="License Plate"
+            placeholderTextColor="#bcbcbc"  
             onChangeText={(text) => updateDriverInputValueHandler('licensePlate', text)}
             value={licensePlate}
-            style={style.inputContainer}
+            style={{
+              ...style.inputContainer,
+              backgroundColor: 'white', 
+            }}
           />
           <TextInput
             placeholder="Driver License"
+            placeholderTextColor="#bcbcbc"  
             onChangeText={(text) =>updateDriverInputValueHandler('driverLicense', text)}
             value={driverLicense}
-            style={style.inputContainer}
+            style={{
+              ...style.inputContainer,
+              backgroundColor: 'white', 
+            }}
           />
           <TextInput
             placeholder="Car Model"
+            placeholderTextColor="#bcbcbc"  
             onChangeText={(text) => updateDriverInputValueHandler('carModel', text)}
             value={carModel}
-            style={style.inputContainer}
+            style={{
+              ...style.inputContainer,
+              backgroundColor: 'white', 
+            }}
           />
           {isDriver && (
         <View>
-            <TouchableOpacity onPress={togglePicker}>
-                <Text style={style.inputContainer}>Select your car type</Text>
+            <TouchableOpacity onPress={togglePicker} style={{...style.inputContainer, backgroundColor: 'white'}}>
+                 <Text style={{color: '#bcbcbc'}}>Select Your Car Type</Text>
             </TouchableOpacity>
             {isPickerVisible && (
               
@@ -214,74 +265,91 @@ function submitHnadler(){
         <Text style={style.CarTypeText}>Selected Car Type: {carType}</Text>
     </View>
 )}
+  
         <View>
 
-       <Text style={[style.label,emailIsInvalid && style.labelIsInvalid]}>Email Address</Text>
+       <Text style={[style.label,emailIsInvalid && style.labelIsInvalid]}></Text>
        <TextInput 
        autoCapitalize='none'
        keyboardType='email-address'
+       placeholder="Csun Email Address"  
+       placeholderTextColor="#bcbcbc"  
        onChangeText={(text) => updateInputValueHnadler('email',text)}
        value={enteredEmail}
-       style={[style.inputContainer, emailIsInvalid&&style.inputIsInvalid]}
+       style={[style.inputContainer, emailIsInvalid && style.inputIsInvalid, { backgroundColor: 'white' }]}
        />
+
        </View>
        {!isLogin && (
         <View>
             <Text style={[style.label,emailsDontMatch && style.labelIsInvalid]}>
-                confirm email address
+                
 
             </Text>
             <TextInput
             autoCapitalize='none'
             keyboardType='email-address'
+            placeholder="Confirm Email Address"  
+            placeholderTextColor="#bcbcbc"  
             onChangeText={(text) => updateInputValueHnadler('confirmEmail',text)}
             value={enteredConfirmEmail}
-            style={[style.inputContainer,emailsDontMatch && style.inputIsInvalid]}
+            style={[style.inputContainer, emailsDontMatch && style.inputIsInvalid, { backgroundColor: 'white' }]}
             />
             </View>
             )}
             <View>
                 <Text style={[style.label , passwordIsInvalid && style.labelIsInvalid]}>
-                    Password
+                    
                 </Text>
                 <TextInput
                 autoCapitalize='none'
+                placeholder="Enter Password"  
+                placeholderTextColor="#bcbcbc"  
                 onChangeText={(text) => updateInputValueHnadler('password',text)}
                 value={enteredPassword}
-                style={[style.inputContainer , passwordIsInvalid && style.labelIsInvalid]}
+                style={[
+                  style.inputContainer,
+                  { backgroundColor: 'white' }, 
+                  passwordIsInvalid && style.labelIsInvalid
+              ]}
+
                 />
              </View>
              {!isLogin &&(
                 <View> 
                     <Text style={[style.label ,passwordsDontMatch && style.labelIsInvalid]}>
-                        confirm Password
+                    
 
                    </Text>
                    <TextInput 
                    autoCapitalize='none'
+                   placeholder="Confirm Password"  
+                   placeholderTextColor="#bcbcbc"  
                    onChangeText={(text) => updateInputValueHnadler ('passwordconfirmation', text)}
                    value={enteredConfirmPassword}
-                   style={[style.inputContainer, passwordsDontMatch,style.inputIsInvalid]}
+                   style={[
+                    style.inputContainer, 
+                    passwordsDontMatch, 
+                    style.inputIsInvalid,
+                    { backgroundColor: 'white' } 
+                  ]}
+
                    
                    />
                 </View>
              )}
+
+            <View style={{ marginBottom: 20 }} />
+
              <View>
-             <TouchableOpacity onPress={submitHnadler} style={style.button}>
-        <Text>Register</Text>
-      </TouchableOpacity>
-            
-             </View>
-             
-
-
-
-
-        
-    
-
-
-
+             <TouchableOpacity onPress={submitHnadler} style={{...style.button, backgroundColor: '#E50025'}}>
+                <Text style={{ color: 'white' }}>Register</Text>
+             </TouchableOpacity>
+             <Text style={{ marginTop: 10, textAlign: 'center', color: '#666666' }}>
+                By clicking the Register button, you agree to our <Text style={{ color: '#E50025' }}>Terms & Conditions</Text>.
+              </Text>
+          </View>
+   
        
        <TextInput/>
 
@@ -298,14 +366,16 @@ export default RegisterForm;
 const style=StyleSheet.create({
 
     container:{
-        flex:1,
-        padding:20,
-        backgroundColor:'#f94449',
+      flex:1,
+      padding:20,
+      backgroundColor:'#EEF2F8',
+      marginTop: -10, // Adjust this value 
+       
     },
-    Header:{
-        fontSize:30,
-        
+     Header:{
+        fontSize:26,
         marginBottom:10,
+        //marginTop: 5, // Adjust this value 
         fontWeight:'bold',
 
 
@@ -316,7 +386,7 @@ const style=StyleSheet.create({
         borderColor:'#FFF',
         borderRadius:5,
         padding:10,
-        marginBottom:15,
+        marginBottom: 10,
         color:'#FFF',
         
     },
@@ -342,7 +412,7 @@ const style=StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 8,
 
     },
     switchContainer:{
@@ -375,5 +445,26 @@ const style=StyleSheet.create({
       elevation: 2,
       alignItems: 'center',
     },
-        
+
+
+
+
+    uploadProfileContainer: {
+      flex: 1,
+      justifyContent: 'center', // Center vertically
+      alignItems: 'center', // Center horizontally
+  },
+
+  circleIcon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  circleBackground: {
+    backgroundColor: 'lightgrey', // You can set any color you want
+    borderRadius: 55, // Half of the icon size for a perfect circle
+    padding:10, // Adjust the padding as needed
+  },
+
+
     })
+
