@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Drivers from "./Drivers";
 import Messages from "./Messages";
 import maps from "./Map";
+import Profile from "./Profile";
 import { GStyle } from "./General style/GStyle";
 import { Ionicons } from '@expo/vector-icons';
 import Driverlist from "../Information/DriverList";
@@ -13,13 +14,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const BottomTabs = createBottomTabNavigator();
-function profileScreen({ navigation }) {
-    return (
-        <View>
-            <Text>Your profile content goes here</Text>
-        </View>
-    );
-}
+
 function filterHandling({ navigation }) {
     return (
         <View>
@@ -53,7 +48,7 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
                     title: "Recent Driver",
                     tabBarLabel: "Recent",
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="car" size={size} color={color} />
+                        <Ionicons name="car" size={size} color={'White'} />
                     ),
                 }}
             />
@@ -61,7 +56,7 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
                 options={{
                     title: 'Messages',
                     tabBarLabel: 'Messages',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='paper-plane' size={size} color={color} />
+                    tabBarIcon: ({ color, size }) => <Ionicons name='paper-plane' size={size} color={'White'} />
 
 
                 }} />
@@ -69,13 +64,14 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
                 options={{
                     title: 'Maps',
                     tabBarLabel: 'Maps',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='map' size={size} color={color} />
+                    tabBarIcon: ({ color, size }) => <Ionicons name='map' size={size} color={'White'} />
                 }} />
-            <BottomTabs.Screen name="Profile" component={profileScreen}
+            <BottomTabs.Screen name="Profile" 
+            component={Profile}
                 options={{
                     title: 'Profile',
                     tabBarLabel: 'Profile',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='person' size={size} color={color} />
+                    tabBarIcon: ({ color, size }) => <Ionicons name='person' size={size} color={'White'} />
                 }} />
         </BottomTabs.Navigator>
 

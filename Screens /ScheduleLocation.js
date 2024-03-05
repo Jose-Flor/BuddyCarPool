@@ -113,20 +113,20 @@ function ScheduleLocation({route,navigation}){
            
             selectedDays: daysArray
         };
-        try {
-            const response = await axios.post('http://localhost:5000/schedule', updatedUserData);
-            if (response.status === 201) {
-                // Handle success
-                Alert.alert("Schedule Added", "Your schedule has been successfully added.");
-                navigation.navigate('MainScreen');
-            } else {
-                // Handle any other HTTP status code
-                Alert.alert("Error", "There was a problem adding your schedule.");
-            }
-        } catch (error) {
-            console.error('Error submitting schedule:', error);
-            Alert.alert("Error", "Failed to submit schedule.");
-        }
+        // try {
+        //     const response = await axios.post('http://localhost:5000/schedule', updatedUserData);
+        //     if (response.status === 201) {
+        //         // Handle success
+        //         Alert.alert("Schedule Added", "Your schedule has been successfully added.");
+        //         navigation.navigate('MainScreen');
+        //     } else {
+        //         // Handle any other HTTP status code
+        //         Alert.alert("Error", "There was a problem adding your schedule.");
+        //     }
+        // } catch (error) {
+        //     console.error('Error submitting schedule:', error);
+        //     Alert.alert("Error", "Failed to submit schedule.");
+        // }
         try {
             const existingData = await AsyncStorage.getItem('drivers');
             let newDriverList = existingData ? JSON.parse(existingData) : [];

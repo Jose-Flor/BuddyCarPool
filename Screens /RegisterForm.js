@@ -119,18 +119,18 @@ function submitHnadler(){
         };
     }
     //api end points
-    axios.post('http://10.0.2.2:5000/register', userData)
-      .then(response => {
-        console.log('Registration successful:', response.data);
-        if (typeof onSubmit === 'function') {
-          onSubmit(userData, response.data); // Optional callback
-        }
-        navigation.navigate('ScheduleLocation', {  userData });
-      })
-      .catch(error => {
-        console.error('Registration failed:', error);
-        Alert.alert('Registration Failed', 'Failed to register. Please try again.');
-      });
+    // axios.post('http://10.0.2.2:5000/register', userData)
+    //   .then(response => {
+    //     console.log('Registration successful:', response.data);
+    //     if (typeof onSubmit === 'function') {
+    //       onSubmit(userData, response.data); // Optional callback
+    //     }
+         navigation.navigate('ScheduleLocation', {  userData });
+    //   })
+    //   .catch(error => {
+    //     console.error('Registration failed:', error);
+    //     Alert.alert('Registration Failed', 'Failed to register. Please try again.');
+    //   });
 
    
 }
@@ -222,6 +222,7 @@ function submitHnadler(){
             style={{
               ...style.inputContainer,
               backgroundColor: 'white', 
+              color:'black'
             }}
           />
           <TextInput
@@ -232,6 +233,7 @@ function submitHnadler(){
             style={{
               ...style.inputContainer,
               backgroundColor: 'white', 
+              color:'black'
             }}
           />
           <TextInput
@@ -242,6 +244,7 @@ function submitHnadler(){
             style={{
               ...style.inputContainer,
               backgroundColor: 'white', 
+              color:'black'
             }}
           />
           {isDriver && (
@@ -287,7 +290,7 @@ function submitHnadler(){
        placeholderTextColor="#bcbcbc"  
        onChangeText={(text) => updateInputValueHnadler('email',text)}
        value={enteredEmail}
-       style={[style.inputContainer, emailIsInvalid && style.inputIsInvalid, { backgroundColor: 'white' }]}
+       style={[style.inputContainer, emailIsInvalid && style.inputIsInvalid, { backgroundColor: 'white',color:'black' }]}
        />
 
        </View>
@@ -304,7 +307,7 @@ function submitHnadler(){
             placeholderTextColor="#bcbcbc"  
             onChangeText={(text) => updateInputValueHnadler('confirmEmail',text)}
             value={enteredConfirmEmail}
-            style={[style.inputContainer, emailsDontMatch && style.inputIsInvalid, { backgroundColor: 'white' }]}
+            style={[style.inputContainer, emailsDontMatch && style.inputIsInvalid, { backgroundColor: 'white',color:'black' }]}
             />
             </View>
             )}
@@ -320,7 +323,7 @@ function submitHnadler(){
                 value={enteredPassword}
                 style={[
                   style.inputContainer,
-                  { backgroundColor: 'white' }, 
+                  { backgroundColor: 'white',color:'black' }, 
                   passwordIsInvalid && style.labelIsInvalid
               ]}
 
@@ -342,7 +345,7 @@ function submitHnadler(){
                     style.inputContainer, 
                     passwordsDontMatch, 
                     style.inputIsInvalid,
-                    { backgroundColor: 'white' } 
+                    { backgroundColor: 'white',color:'black' } 
                   ]}
 
                    
@@ -408,6 +411,7 @@ const style=StyleSheet.create({
 
     },
     label:{
+      color: 'black'
 
     },
     labelIsInvalid:{
