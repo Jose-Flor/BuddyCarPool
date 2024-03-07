@@ -10,6 +10,7 @@ import DriverOverView from './Information/DriverOverView';
 
 import ScheduleLocation from './Screens /ScheduleLocation';
 import DriverFilter from './Information/Filters';
+import StudentProfile from './Information/StudentProfile';
 
 const Stack=createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ export default function App() {
         <Stack.Screen  name='ScheduleLocation' component={ScheduleLocation}/>
         <Stack.Screen name='DriverList' component={Driverlist} />
         <Stack.Screen name='DriverFilter' component={DriverFilter}/>
+        <Stack.Screen name='StudentProfile' component={StudentProfile} />
         
 
       </Stack.Navigator>

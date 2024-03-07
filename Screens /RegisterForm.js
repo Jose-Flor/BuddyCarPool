@@ -2,8 +2,10 @@ import { useState } from 'react';
 import {StyleSheet, Text, TextInput, View,ScrollView,Switch,TouchableOpacity,Alert,KeyboardAvoidingView, Platform, Modal}from'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ScheduleLocation from './ScheduleLocation';
-import {Picker, picker} from "@react-native-picker/picker"
+import {Picker} from "@react-native-picker/picker"
 import axios from 'axios'
+import { fetchUserData, saveUserData, signUp } from '../back-end/Http';
+
 
 
 
@@ -88,8 +90,8 @@ function updateDriverInputValueHandler(inputType, enteredValue) {
         break;
     }
   }
-function submitHnadler(){
-    const isStudentEmail=enteredEmail.endsWith('@my.csun.edu');
+async function submitHnadler(){
+    const isStudentEmail=enteredEmail.endsWith('@gmail.com');
     if (!isStudentEmail) {
         alert('You must use a student email to register.');
         return;
@@ -118,6 +120,25 @@ function submitHnadler(){
             passengerLimit
         };
     }
+    if (enteredEmail !== enteredConfirmEmail || enteredPassword !== enteredConfirmPassword) {
+      Alert.alert('Error', 'Emails or passwords do not match.');
+      return;
+  }
+  try {
+    const signUpResponse=await signUp(enteredEmail, enteredPassword);
+    const userId=signUpResponse.localId;
+    const userDataFromAuth=await fetchUserData(signUpResponse.idToken);
+    const CompleteUserData={
+      ...userData,
+      ...userDataFromAuth,
+    }
+    await saveUserData(userId,CompleteUserData);
+
+    console.log("registeration was successful");
+
+
+
+
     //api end points
     // axios.post('http://10.0.2.2:5000/register', userData)
     //   .then(response => {
@@ -125,7 +146,15 @@ function submitHnadler(){
     //     if (typeof onSubmit === 'function') {
     //       onSubmit(userData, response.data); // Optional callback
     //     }
-         navigation.navigate('ScheduleLocation', {  userData });
+    if(isDriver){
+      navigation.navigate('ScheduleLocation', { userData: { userId: userId } });
+    }else{
+      navigation.navigate('Register');
+    }
+  }catch(error){
+    console.error('Registration failed32:', error);
+        Alert.alert('Registration Failed', 'Failed to register. Please try again.');
+  }
     //   })
     //   .catch(error => {
     //     console.error('Registration failed:', error);
@@ -358,6 +387,7 @@ function submitHnadler(){
 
  
 }
+
 export default RegisterForm;
 const style=StyleSheet.create({
 

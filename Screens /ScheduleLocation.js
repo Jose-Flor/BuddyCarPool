@@ -7,8 +7,9 @@ import React from "react";
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import { Picker } from '@react-native-picker/picker';
-import axios from 'axios'
-import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
+import { saveUserData } from "../back-end/Http";
+
 
 
 function CustomButton({ title, onPress, color }) {
@@ -67,8 +68,10 @@ function ScheduleLocation({route,navigation}){
 
 
   
-    const userData=route.params?.userData;
-    
+    // const userData=route.params?.userData;
+    // const userId = route.params.userData.userId;
+    const { userId } = route.params.userData;
+
 
     const formatDate = (date) => {
         return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
@@ -106,7 +109,7 @@ function ScheduleLocation({route,navigation}){
 
 
         const updatedUserData = {
-            ...userData,
+            ...route.params?.userData,
             Schedule:ScheduleDate.toISOString(),
             zipCode,
             bio,
@@ -114,6 +117,15 @@ function ScheduleLocation({route,navigation}){
            
             selectedDays: daysArray
         };
+        try{
+            const result=await saveUserData(route.params?.userData?.userId, updatedUserData);
+            Alert.alert("Schedule Added ","your schedule has been added ");
+            navigation.navigate('Register');
+
+        }catch(error){
+            console.error('Error submitting the scheduele ',error);
+            Alert.alert("Erorr ","failed to submit schedule ")
+        }
         // try {
         //     const response = await axios.post('http://localhost:5000/schedule', updatedUserData);
         //     if (response.status === 201) {
@@ -128,17 +140,17 @@ function ScheduleLocation({route,navigation}){
         //     console.error('Error submitting schedule:', error);
         //     Alert.alert("Error", "Failed to submit schedule.");
         // }
-        try {
-            const existingData = await AsyncStorage.getItem('drivers');
-            let newDriverList = existingData ? JSON.parse(existingData) : [];
-            newDriverList.push(updatedUserData);
-            await AsyncStorage.setItem('drivers', JSON.stringify(newDriverList));
-            Alert.alert("Welcome to CarpoolBuddy");
-            navigation.navigate('DriverList');
-          } catch (error) {
-            console.error('Error saving data', error);
-            Alert.alert("Error", "Failed to save data");
-          }
+        // try {
+        //     const existingData = await AsyncStorage.getItem('drivers');
+        //     let newDriverList = existingData ? JSON.parse(existingData) : [];
+        //     newDriverList.push(updatedUserData);
+        //     await AsyncStorage.setItem('drivers', JSON.stringify(newDriverList));
+        //     Alert.alert("Welcome to CarpoolBuddy");
+        //     navigation.navigate('DriverList');
+        //   } catch (error) {
+        //     console.error('Error saving data', error);
+        //     Alert.alert("Error", "Failed to save data");
+        //   }
         
     };
     const handleImagePicker = async () => {
