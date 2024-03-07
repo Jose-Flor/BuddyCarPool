@@ -1,13 +1,33 @@
 
 import React, { useState } from 'react';
-import{View, Image, Text, ImageBackground, TouchableOpacity, Button, StyleSheet, TextInput}from"react-native"
+import{View, Image, Text, ImageBackground, TouchableOpacity, Button, StyleSheet, TextInput, Alert}from"react-native"
+import { fetchDataBasedOnRole, fetchUserData, signIn,fetchAllData } from '../back-end/Http';
+
+
 
 function RegisterScreen({navigation}){
-    const handleSignIn=()=>{
-        navigation.navigate('main')
-    }
-    
-    const handleRegister=()=>{
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSignIn=async()=>{
+        try {
+            const signInWithPassword = await signIn(email, password);
+            if (signInWithPassword) {
+                // Fetch all student and driver data
+                const allUsersData = await fetchAllData();
+
+                // Pass this data to the main screen
+                navigation.navigate('main', { students: allUsersData.students, drivers: allUsersData.drivers });
+            } else {
+                Alert.alert("Login Failed", "Email or password is wrong");
+            }
+        } catch (error) {
+            console.error('sign-in error:', error);
+            Alert.alert("Login error", "Please try again later");
+        }
+    };
+    const handleRegister= ()=>{
+
         navigation.navigate('RegisterForm')
 
     }
@@ -29,11 +49,13 @@ function RegisterScreen({navigation}){
         </View>
         </View>
         <View style={styles.inputContainer}>
-            <TextInput style={styles.TextInput} placeholder="CSUN Email"  placeholderTextColor="darkgrey"/>
+            <TextInput style={styles.TextInput} placeholder="CSUN Email" value={email} onChangeText={(text)=>setEmail(text)}
+             placeholderTextColor="darkgrey"/>
 
         </View>
         <View style={styles.inputContainer}>
-            <TextInput  style={styles.TextInput} placeholder="Password" placeholderTextColor="darkgrey" secureTextEntry={true} />
+            <TextInput  style={styles.TextInput} placeholder="Password" value={password} onChangeText={(text)=>setPassword(text)}
+             placeholderTextColor="darkgrey" secureTextEntry={true} />
         </View>
         
         

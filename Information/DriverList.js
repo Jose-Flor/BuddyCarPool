@@ -1,6 +1,8 @@
 import {FlatList, Pressable, View,Text,StyleSheet,Platform,Alert,Image} from'react-native';
 import React,{useState,useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Ionicons}from'@expo/vector-icons'
+import { fetchAllData } from '../back-end/Http';
 
 
 
@@ -30,6 +32,22 @@ function GridTile({name,Schedule,licensePlate,onPress,imageUri,selectedDays,carT
 
                     <Text></Text>
                 </View>
+                <View style={styles.buttonContainer}>
+  <Pressable 
+    style={styles.interactionButton} 
+    onPress={() => {/* Handle message action */}}
+  >
+    <Ionicons name='chatbubbles' size={29} color='white' />
+    
+  </Pressable>
+  <Pressable 
+    style={styles.interactionButton} 
+    onPress={() => {/* Handle call action */}}
+  >
+    <Ionicons name='call' size={30} color='white'/>
+    <Text>Request</Text>
+  </Pressable>
+</View>
             </Pressable>
         </View>
 
@@ -43,27 +61,43 @@ function Driverlist({navigation,filteredDrivers}){
 
     const [drivers, setDrivers] = useState([]);
 
+    // useEffect(() => {
+    //     const loadDrivers = async () => {
+    //         try {
+    //             const storedDrivers = await AsyncStorage.getItem('drivers');
+    //             if (storedDrivers !== null) {
+    //                 const parsedDrivers = JSON.parse(storedDrivers);
+    //                 setDrivers(parsedDrivers); // Corrected from setDriver to setDrivers
+    //             }
+    //         } catch (error) {
+    //             Alert.alert("Error", "Failed to load drivers");
+    //         }
+    //     };
+    //     if (!filteredDrivers || filteredDrivers.length === 0) {
+    //         loadDrivers();
+    //     }
+    // }, [filteredDrivers]);
+
+
+    // const handlePress = (driver) => {
+    //     navigation.navigate('DriverOverView', { driver: driver });
+    // }
     useEffect(() => {
-        const loadDrivers = async () => {
+        const fetchData = async () => {
             try {
-                const storedDrivers = await AsyncStorage.getItem('drivers');
-                if (storedDrivers !== null) {
-                    const parsedDrivers = JSON.parse(storedDrivers);
-                    setDrivers(parsedDrivers); // Corrected from setDriver to setDrivers
-                }
+                const { drivers } = await fetchAllData();
+                setDrivers(drivers);
             } catch (error) {
-                Alert.alert("Error", "Failed to load drivers");
+                Alert.alert('Error', 'Failed to fetch drivers');
             }
         };
-        if (!filteredDrivers || filteredDrivers.length === 0) {
-            loadDrivers();
-        }
-    }, [filteredDrivers]);
 
+        fetchData();
+    }, []);
 
     const handlePress = (driver) => {
-        navigation.navigate('DriverOverView', { driver: driver });
-    }
+        navigation.navigate('DriverOverView', { driver });
+    };
 
 
     const dataToShow = filteredDrivers && filteredDrivers.length > 0 ? filteredDrivers : drivers;
@@ -87,6 +121,7 @@ function Driverlist({navigation,filteredDrivers}){
   carModel={item.driverInfo?.carModel}
 
             onPress={() => handlePress(item)}
+            
        />
      )}
      numColumns={2} 
@@ -141,4 +176,18 @@ const styles = StyleSheet.create({
         height: 100, // Adjust the height as needed
         borderRadius: 8,
     },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 10,
+      },
+      interactionButton: {
+        flexDirection: 'row', // To align icon and text horizontally
+        backgroundColor: '#007bff', // Example color
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center', // Center items vertically
+        justifyContent: 'center', // Center items horizontally
+        marginRight: 5, 
+      },
 })

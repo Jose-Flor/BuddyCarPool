@@ -12,6 +12,8 @@ import DriverFilter from "../Information/Filters";
 import { useState, useEffect } from "react";
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import StudentSummary from "../Information/StudentSummary";
+
 const BottomTabs = createBottomTabNavigator();
 function profileScreen({ navigation }) {
     return (
@@ -41,7 +43,7 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
                 tabBarStyle: { backgroundColor: GStyle.colors.bottmbTabs },
                 tabBarActiveBackgroundColor: GStyle.colors.BottomTabsActive,
 
-                headerRight: () => <IconButton icon='menu' size={24} color='white' onPress={() => { navigation.navigate('') }} />,
+                headerRight: () => <IconButton icon='menu' size={24} color='white' onPress={() => { navigation.navigate('StudentProfile') }} />,
                 headerLeft: () => <IconButton icon='funnel' size={22} color='white' onPress={() => setIsFilterModalVisible(true)} />
 
             })}>
@@ -57,6 +59,13 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
                     ),
                 }}
             />
+                    <BottomTabs.Screen name='StudentSummary' component={StudentSummary} 
+                    options={{
+                        title:'Students ',
+                        tabBarLabel:'Students',
+                        tabBarIcon:({color,size})=> <Ionicons name="person" size={size} color={color} />
+                    }}
+                    />
             <BottomTabs.Screen name="Messages" component={Messages}
                 options={{
                     title: 'Messages',
@@ -71,12 +80,7 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
                     tabBarLabel: 'Maps',
                     tabBarIcon: ({ color, size }) => <Ionicons name='map' size={size} color={color} />
                 }} />
-            <BottomTabs.Screen name="Profile" component={profileScreen}
-                options={{
-                    title: 'Profile',
-                    tabBarLabel: 'Profile',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='person' size={size} color={color} />
-                }} />
+            
         </BottomTabs.Navigator>
 
     );
@@ -87,6 +91,9 @@ function MainScreen() {
     const [allDrivers, setAllDrivers] = useState([]);
     const [filteredDrivers, setFilteredDrivers] = useState([]);
     const [selectedDay, setSelectedDay] = useState('Monday');
+    const [userData, setUserData] = useState(null);
+
+   
 
     const filterDrivers = (drivers, day) => {
         if (day) {
@@ -125,6 +132,7 @@ function MainScreen() {
             <TabsOverview
                 setIsFilterModalVisible={setIsFilterModalVisible}
                 filteredDrivers={filteredDrivers}
+                userData={userData}
             />
             <Modal
                 animationType="slide"
@@ -136,7 +144,7 @@ function MainScreen() {
                     selectedDay={selectedDay}
                     setSelectedDay={(day) => {
                         setSelectedDay(day);
-                        setIsFilterModalVisible(true);
+                        setIsFilterModalVisible(false);
                         filterDrivers(allDrivers, day);
                     }}
                     onClose={() => setIsFilterModalVisible(false)}

@@ -1,19 +1,18 @@
 
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import'firebase/firestore'
-if(!firebase.getApps.length){
+
+import firebase from '@react-native-firebase/app';
+if(!firebase.apps.length){
 const firebaseConfig = {
-    apiKey: "AlzaSyBpC3rN7IB0UtI-pWfN69kOsA4qEhoVI7E",
+    apiKey: "AIzaSyBpC3rN7lB0UtI-pWfN69kOsA4qEhoVI7E",
     authDomain: "carpoolbuddy-d054e.firebaseapp.com",
+    databaseURL: "https://carpoolbuddy-d054e-default-rtdb.firebaseio.com",
     projectId: "carpoolbuddy-d054e",
     storageBucket: "carpoolbuddy-d054e.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",  // Add this from Firebase Console if needed
-    appId: "YOUR_APP_ID",  // Add this from Firebase Console
+    messagingSenderId: "359004762342",
+    appId: "1:359004762342:web:562397b3d6740d06edcb27",
+    measurementId: "G-J191RX1766"
 };
-firebase.initializeApp(firebaseConfig)
-}else{
-    firebase.app();
+firebase.initializeApp(firebaseConfig);
 }
 
 export default firebase;
