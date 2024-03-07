@@ -155,25 +155,7 @@ function submitHnadler(){
 
        <Text style={style.Header}>Create Account</Text>
 
-       <TouchableOpacity onPress={() => handleIconButtonPress()}>
-  <View style={style.circleIcon}>
-    <View style={style.circleBackground}>
-      <Ionicons name="ios-person" size={55} color="#636363" />
-    </View>
-  </View>
-</TouchableOpacity>
-<View style={style.SubHeader}>
-  {/* Your SubHeader content here */}
-</View>
-
-<View style={style.uploadProfileContainer}>
-  <Text style={{ fontSize: 13, marginBottom: 10, color: 'black' }}>Upload Profile Picture</Text>
-</View>
-        
-
-        <View style={style.uploadProfileContainer}>
-        {/*<Text style={{ fontSize: 13, marginBottom: 10, color: 'black' }}>Upload Profile Picture</Text>*/}
-        </View>
+       
 
         <TextInput 
         
@@ -382,13 +364,14 @@ const style=StyleSheet.create({
     container:{
         flex:1,
         padding:20 ,
-        backgroundColor:'#f94449',
+        backgroundColor:'lightgrey',
     },
      Header:{
         fontSize:26,
         marginBottom:10,
         //marginTop: 5, // Adjust this value 
         fontWeight:'bold',
+        alignItems: 'center'
 
 
 

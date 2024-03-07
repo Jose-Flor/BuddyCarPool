@@ -8,6 +8,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios'
+import { Ionicons } from '@expo/vector-icons';
 
 
 function CustomButton({ title, onPress, color }) {
@@ -190,8 +191,23 @@ function ScheduleLocation({route,navigation}){
 
     return(
         <ScrollView style={styles.container}>
-            <Text style={styles.label}>Schedule:</Text>
-            <CustomButton title="Choose Date" onPress={() => setShowDatePicker(true)} color="#007AFF" />
+        <TouchableOpacity onPress={() => handleIconButtonPress()}>
+  <View style={styles.circleIcon}>
+    <View style={styles.circleBackground}>
+      <Ionicons name="ios-person" size={55} color="#636363" />
+    </View>
+  </View>
+</TouchableOpacity>
+<View style={styles.SubHeader}>
+  {/* Your SubHeader content here */}
+</View>
+
+<View style={styles.uploadProfileContainer}>
+  <Text style={{ fontSize: 13, marginBottom: 10, color: 'black' }}>Upload Profile Picture</Text>
+</View>
+        
+            <Text style={styles.label}>Your Availability:</Text>
+            <CustomButton title="Choose Dates" onPress={() => setShowDatePicker(true)} color="#007AFF" />
 
             {showDatePicker && (
                 <DateTimePicker 
@@ -250,16 +266,7 @@ function ScheduleLocation({route,navigation}){
                 value={zipCode}
                 onChangeText={setzipCode}
             />
-            <CustomButton title="Upload Picture" onPress={handleImagePicker} color="#007AFF" />
-            {imageUri ?<Image source={{ uri: imageUri }} style={styles.image} />: null} 
-            <TextInput
-                style={styles.input}
-                placeholder="Enter a short bio"
-                value={bio}
-                onChangeText={setBio}
-                //multiline={true}
-                //numberOfLines={4}
-            />
+            
 
            <CustomButton title="Submit" onPress={submitHandler} color="#007AFF" />
 
@@ -280,7 +287,7 @@ const styles=StyleSheet.create({
     container:{
        flex: 1,
        padding:20,
-       backgroundColor:'#f94449'
+       backgroundColor:'white'
     },
     sectionTitle: {
         fontSize: 15,
@@ -322,6 +329,7 @@ const styles=StyleSheet.create({
         fontSize: 15,
         marginBottom: 10,
         color: '#333', 
+        paddingBottom: 0,
     },
     image: {
         width: 100, // Adjust as needed
@@ -368,9 +376,25 @@ const styles=StyleSheet.create({
         fontSize: 16,
         color: 'blue',
         marginBottom: 10,
-        fontWeight:'bold'
+        fontWeight:'bold',
+        paddingBottom: 30,
     },
- 
+    uploadProfileContainer: {
+        flex: 1,
+        justifyContent: 'center', // Center vertically
+        alignItems: 'center', // Center horizontally
+        paddingBottom: 30,
+        
+    },
 
-
+    circleIcon: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: 10,
+      },
+      circleBackground: {
+        backgroundColor: 'lightgrey', // You can set any color you want
+        borderRadius: 55, // Half of the icon size for a perfect circle
+        padding:10, // Adjust the padding as needed
+      },
 })

@@ -1,7 +1,7 @@
 export const GStyle={
     colors: {
         buttonColor:'black',
-        bottmbTabs:'#E3170A',
+        bottmbTabs:'#B03A2E',
         background: 'red',
         BottomTabsActive:'white',
 
