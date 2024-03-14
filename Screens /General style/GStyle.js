@@ -4,6 +4,7 @@ export const GStyle={
         bottmbTabs:'#B03A2E',
         background: 'red',
         BottomTabsActive:'white',
+        tabBarLabel: 'black',
 
 
     }

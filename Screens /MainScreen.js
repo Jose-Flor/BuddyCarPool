@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { Text, View, Modal, Button } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Drivers from "./Drivers";
+import Dri from "./Drivers";
 import Messages from "./Messages";
 import maps from "./Map";
 import Profile from "./Profile";
