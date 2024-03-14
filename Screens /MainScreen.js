@@ -14,8 +14,23 @@ import { useState, useEffect } from "react";
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StudentSummary from "../Information/StudentSummary";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ChatScreen from "./ChatScreen";
+//import {createDrawerNavigator}from '@react-navigation/drawer'
 
 const BottomTabs = createBottomTabNavigator();
+const MessagesStack=createNativeStackNavigator();
+function MessagesStackNavigator() {
+  return (
+    <MessagesStack.Navigator>
+      <MessagesStack.Screen name='Messages' component={Messages} />
+      <MessagesStack.Screen name='ChatScreen' component={ChatScreen} options={({ route }) => ({
+        title: route.params.userName
+      })}/>
+      {/* Add other screens related to Messages here if necessary */}
+    </MessagesStack.Navigator>
+  );
+}
 
 function filterHandling({ navigation }) {
     return (
@@ -25,6 +40,16 @@ function filterHandling({ navigation }) {
         </View>
     );
 }
+// const Drawer=createDrawerNavigator();
+// function Profiling({navigation}){
+//     return(
+//         <View>
+//             <Button onPress={()=>navigation.goback()} title="go " />
+
+//         </View>
+//     )
+
+// }
 function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
     return (
 
@@ -61,7 +86,7 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
                         tabBarIcon:({color,size})=> <Ionicons name="person" size={size} color={color} />
                     }}
                     />
-            <BottomTabs.Screen name="Messages" component={Messages}
+            <BottomTabs.Screen name="MessagesTab" component={MessagesStackNavigator}
                 options={{
                     title: 'Messages',
                     tabBarLabel: 'Messages',

@@ -1,61 +1,105 @@
 
-import{Text,StyleSheet, View,Image,FlatList,ActivityIndicator}from 'react-native'
-import { fetchAllData } from '../back-end/Http';
-import{useState,useEffect}from'react'
+import{Text,StyleSheet, View,Image, TouchableOpacity}from 'react-native'
+import { Ionicons } from '@expo/vector-icons';
+import { useState } from 'react';
 
-function StudentSummary({navigation,route}){
-    const userData=route.params?.userData;
-    const [studentData, setStudentData] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    useEffect(() => {
-        if (!userData) {
-            // Handle the case where userData is not available
-            console.error('User data is not available');
-            return;
-        }
-        setIsLoading(true);
-        if (userData.role === 'driver') {
-            fetchAllData()
-                .then((data) => {
-                    setStudentData(data.students);
-                    setIsLoading(false);
-                })
-                .catch((error) => {
-                    console.error('Error fetching student data:', error);
-                    setIsLoading(false);
-                });
-        } else {
-            setIsLoading(false);
-        }
-    }, [userData]);
 
+
+function StudentSummary(){
+  const [isLiked,setIsLiked]=useState(false);
+  const toggleLiked=()=>{
+    setIsLiked(!isLiked);
+  }
   
-  const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <View style={styles.UserInfo}>
-       
-        <View style={styles.UserInfoText}>
-          <Text style={styles.UserName}>{item.firstName} {item.lastName}</Text>
-          {/* Additional student info we going to put it here in futreeeee */}
-        </View>
-      </View>
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+          <View style={styles.card}>
+            <View style={styles.UserInfo}>
+              <Image
+               style={styles.userImage}
+               source={require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/johnsample.jpg')}
+               />
+               <View style={styles.UserInfoText}>
+                <Text style={styles.UserName}>
+                  Ali
+                </Text>
+                <Text style={styles.onlineTime}>
+                  4 hours
 
-  return (
-    <View style={styles.container}>
-      {isLoading ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        <FlatList
-          data={studentData}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()} // Assuming each student has a unique id
-        />
-      )}
-    </View>
-  );
-};
+                </Text>
+
+                  <View style={styles.postText}>
+                    <Text>
+                      welcome to college 
+                    </Text>
+                    <Image style={styles.BigImage}
+                     source={require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/media2.jpg')}/>
+                    
+
+                     <View style={{flexDirection:'row',marginTop:5}}>
+
+                     <TouchableOpacity onPress={toggleLiked} style={styles.Iteracting}>
+                      <Ionicons name={isLiked?'heart':'heart-outline'} size={20} color={isLiked?'#2e64e5 ':'#333'} />
+                      <Text style={{marginLeft:5}}>like</Text>
+                     </TouchableOpacity>
+                     <TouchableOpacity style={[styles.Iteracting,{marginLeft:100}]}>
+                      <Ionicons name='chatbubble-outline' size={20} 
+                      color='#333'/>
+                      <Text style={{marginLeft:5}}>chat</Text>
+                     </TouchableOpacity>
+                     </View>
+                     
+
+                  </View>
+               </View>
+
+            </View>
+            
+            <View style={styles.UserInfo}>
+              <Image
+               style={styles.userImage}
+               source={require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/johnsample.jpg')}
+               />
+               <View style={styles.UserInfoText}>
+                <Text style={styles.UserName}>
+                  jose
+                </Text>
+                <Text style={styles.onlineTime}>
+                  4 hours
+
+                </Text>
+
+                  <View style={styles.postText}>
+                    <Text>
+                      I pay 5 dollars if someone pick me up form my home 
+                    </Text>
+                    
+                    <View style={styles.divider}/>
+
+                     <View style={{flexDirection:'row',marginTop:5}}>
+
+                     
+                     <TouchableOpacity onPress={toggleLiked} style={styles.Iteracting}>
+                      <Ionicons name={isLiked?'heart':'heart-outline'} size={20} color={isLiked?'#2e64e5 ':'#333'} />
+                     </TouchableOpacity>
+                     <TouchableOpacity style={[styles.Iteracting,{marginLeft:100}]}>
+                      <Ionicons name='chatbubble-outline' size={20} color="#333" />
+                      <Text style={{marginLeft:5}}>chat</Text>
+                     </TouchableOpacity>
+                     </View>
+                     
+
+                  </View>
+               </View>
+
+            </View>
+
+          </View>
+
+        </View>
+      
+    );
+}
 export default StudentSummary;
 const styles =StyleSheet.create({
     container:{
@@ -72,12 +116,13 @@ const styles =StyleSheet.create({
         width:'100%',
         marginBottom: 10,
         borderRadius:10,
-        
+        padding:15
     },
     UserInfo:{
         flexDirection:'row',
-        justifyContent: 'center',
-        padding:15
+        
+        padding:15,
+        alignItems:'flex-start',
     },
     userImage:{
         width: 50,
@@ -90,6 +135,8 @@ const styles =StyleSheet.create({
     UserName:{
         fontSize:14,
         fontWeight:'bold',
+        marginEnd:100,
+        marginBottom:1
         
     },
     onlineTime:{
@@ -99,14 +146,42 @@ const styles =StyleSheet.create({
     UserInfoText:{
         flexDirection:'column',
         justifyContent: 'center',
+        marginLeft:10,
        
 
     },
     postText:{
-        fontSize:12,
-        marginRight:10
+
         
+        marginTop:10
+        
+    },
+    BigImage:{
+     width:230,
+     height:220,
+     marginTop:10,
+    },
+    Iteracting:{
+      flexDirection:'row',
+      justifyContent: 'center',
+      borderRadius:10,
+      padding:2 
+      
+      
+     
+    }, 
+    divider:{
+      border:3 ,
+      borderBottomColor:'#333',
+      borderBottomWidth:1,
+      width:250,
+      marginTop:15,
+      alignSelf: 'center',
+
+
     }
+   
+
     
 
 
