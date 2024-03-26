@@ -1,136 +1,124 @@
 
-import{Text,StyleSheet, View,Image, TouchableOpacity}from 'react-native'
+import{Text,StyleSheet, View,Image, TouchableOpacity,FlatList}from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 
 
-
+const PostData=[
+  {
+    id:'1',
+    userName:'Ali',
+    userImg:require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/johnsample.jpg'),
+    onlineTime:'4 hours ago',
+    postText:'Ilove college',
+    postImg:require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/media2.jpg'),
+    like:false,
+  },
+  {
+    id:'2',
+    userName:'Jose',
+    userImg:require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/user-4.jpg'),
+    onlineTime:'3 min ago',
+    postText:'I need a ride ',
+    like:false,
+  },
+]
 function StudentSummary(){
-  const [isLiked,setIsLiked]=useState(false);
-  const toggleLiked=()=>{
-    setIsLiked(!isLiked);
-  }
   
-    return (
-        <View style={styles.container}>
-          <View style={styles.card}>
-            <View style={styles.UserInfo}>
-              <Image
-               style={styles.userImage}
-               source={require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/johnsample.jpg')}
-               />
-               <View style={styles.UserInfoText}>
-                <Text style={styles.UserName}>
-                  Ali
-                </Text>
-                <Text style={styles.onlineTime}>
-                  4 hours
+  const [posts, setPosts] = useState(PostData); 
 
-                </Text>
-
-                  <View style={styles.postText}>
-                    <Text>
-                      welcome to college 
-                    </Text>
-                    <Image style={styles.BigImage}
-                     source={require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/media2.jpg')}/>
-                    
-
-                     <View style={{flexDirection:'row',marginTop:5}}>
-
-                     <TouchableOpacity onPress={toggleLiked} style={styles.Iteracting}>
-                      <Ionicons name={isLiked?'heart':'heart-outline'} size={20} color={isLiked?'#2e64e5 ':'#333'} />
-                      <Text style={{marginLeft:5}}>like</Text>
-                     </TouchableOpacity>
-                     <TouchableOpacity style={[styles.Iteracting,{marginLeft:100}]}>
-                      <Ionicons name='chatbubble-outline' size={20} 
-                      color='#333'/>
-                      <Text style={{marginLeft:5}}>chat</Text>
-                     </TouchableOpacity>
-                     </View>
-                     
-
-                  </View>
-               </View>
-
-            </View>
-            
-            <View style={styles.UserInfo}>
-              <Image
-               style={styles.userImage}
-               source={require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/johnsample.jpg')}
-               />
-               <View style={styles.UserInfoText}>
-                <Text style={styles.UserName}>
-                  jose
-                </Text>
-                <Text style={styles.onlineTime}>
-                  4 hours
-
-                </Text>
-
-                  <View style={styles.postText}>
-                    <Text>
-                      I pay 5 dollars if someone pick me up form my home 
-                    </Text>
-                    
-                    <View style={styles.divider}/>
-
-                     <View style={{flexDirection:'row',marginTop:5}}>
-
-                     
-                     <TouchableOpacity onPress={toggleLiked} style={styles.Iteracting}>
-                      <Ionicons name={isLiked?'heart':'heart-outline'} size={20} color={isLiked?'#2e64e5 ':'#333'} />
-                     </TouchableOpacity>
-                     <TouchableOpacity style={[styles.Iteracting,{marginLeft:100}]}>
-                      <Ionicons name='chatbubble-outline' size={20} color="#333" />
-                      <Text style={{marginLeft:5}}>chat</Text>
-                     </TouchableOpacity>
-                     </View>
-                     
-
-                  </View>
-               </View>
-
-            </View>
-
-          </View>
-
+  const toggleLiked = (postId) => {
+    const updatedPosts = posts.map((post) => {
+      if (post.id === postId) {
+        return {...post, like: !post.like}; // Corrected to 'like'
+      }
+      return post;
+    });
+    setPosts(updatedPosts);
+  }
+  const Rendering= ({ item }) => (
+    <View style={styles.card}>
+      <View style={styles.UserInfo}>
+        <Image
+          style={styles.userImage}
+          source={item.userImg}
+        />
+        <View style={styles.UserInfoText}>
+          <Text style={styles.UserName}>{item.userName}</Text>
+          <Text style={styles.onlineTime}>{item.onlineTime}</Text>
+          <Text style={styles.postText}>{item.postText}</Text>
         </View>
+      </View>
+      {item.postImg && (
+        <Image
+          style={styles.BigImage}
+          source={item.postImg}
+        />
+      )}
+      <View style={styles.interactionWraper}>
+        <TouchableOpacity onPress={() => toggleLiked(item.id)} style={styles.interactionButton}>
+          <Ionicons
+            name={item.likes ? 'heart' : 'heart-outline'}
+            size={24}
+            color={item.likes ? '#2e64e5' : '#333'}
+          />
+          <Text style={styles.interactionText}>Like</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.interactionButton}>
+          <Ionicons name='chatbubble-outline' size={24} color='#333' />
+          <Text style={styles.interactionText}>Chat</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+    return (
+      <View style={styles.container}>
+      <FlatList
+        data={posts}
+        renderItem={({item})=><Rendering item={item} />}
+        keyExtractor={item => item.id}
+      />
+    </View>
+  );
+
       
-    );
+   
+
+    
 }
 export default StudentSummary;
 const styles =StyleSheet.create({
     container:{
         flex:1,
        // justifyContent: 'center',
-        alignItems: 'center',
+        
         backgroundColor:'#FFFF',
         padding:20,
         
     
     },
     card:{
-        backgroundColor:'#f8f8f8',
-        width:'100%',
-        marginBottom: 10,
-        borderRadius:10,
-        padding:15
+     backgroundColor: '#FFFFFF',
+    width: '100%',
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+    borderRadius: 10,
+    padding: 15,
     },
     UserInfo:{
         flexDirection:'row',
-        
         padding:15,
         alignItems:'flex-start',
+        
     },
     userImage:{
         width: 50,
         height:50,
         borderRadius:25
-
-
-
     },
     UserName:{
         fontSize:14,
@@ -147,6 +135,7 @@ const styles =StyleSheet.create({
         flexDirection:'column',
         justifyContent: 'center',
         marginLeft:10,
+        
        
 
     },
@@ -160,6 +149,13 @@ const styles =StyleSheet.create({
      width:230,
      height:220,
      marginTop:10,
+    },
+    interactionWraper:{
+      flexDirection:"row",
+      justifyContent:'center',
+      borderRadius:5,
+      padding:10,
+
     },
     Iteracting:{
       flexDirection:'row',
@@ -177,6 +173,7 @@ const styles =StyleSheet.create({
       width:250,
       marginTop:15,
       alignSelf: 'center',
+      
 
 
     }
