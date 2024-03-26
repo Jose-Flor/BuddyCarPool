@@ -1,98 +1,92 @@
-
-import React, { useState } from 'react';
-import{View, Image, Text, ImageBackground, TouchableOpacity, Button, StyleSheet, TextInput, Alert}from"react-native"
-import { signIn } from '../back-end/Http';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image, Alert } from 'react-native';
 
 
-// function RegisterScreen({navigation}){
-//     const [email, setEmail] = useState('');
-//     const [password, setPassword] = useState('');
+const RegisterScreen = ({ navigation }) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const API_URL =  'http://localhost:5000'
+    const handleSignIn = async () => {
+        try {
+            console.log('Sending POST request to login endpoint...');
+            const response = await fetch('http://10.40.174.182:5000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+    
+            console.log('Response received:', response);
+    
+            if (!response.ok) {
+                // Handle non-2xx responses
+                console.log('Request failed with status:', response.status);
+                const errorData = await response.json();
+                console.log('Error data:', errorData);
+                throw new Error(errorData.error || 'Failed to sign in');
+            }
+    
+            const responseData = await response.json();
+            console.log('Response data:', responseData);
+    
+            if (responseData.success) {
+                // Login successful, navigate to another screen
+                navigation.navigate('main');
+            } else {
+                Alert.alert('Error', responseData.error || 'Failed to sign in');
+            }
+        } catch (error) {
+            console.error('Sign-in error:', error.message);
+            Alert.alert('Error', error.message || 'An unexpected error occurred. Please try again later.');
+        }
+    };
+    
+    
+    const handleRegister = () => {
+        navigation.navigate('RegisterForm');
+    };
 
-//     const handleSignIn=async()=>{
-//         try{
-//             const signInResponse= await signIn(email,password);
-//             const {idToken,userId,isDriver} = signInResponse;
-//             if(!isDriver){//che if student??
-//                 navigation.navigate('main')
-//             }else{
-//                 Alert.alert("Loging Failed","Email or password is wrong ");
-
-//             }
-//         }catch(error){
-//             console.error('sign-in error:',error);
-//             Alert.alert("loging error   ","please try later ")
-//         }
-        
-//     }
-function RegisterScreen({navigation}){
-    const handleSignIn=()=>{
-        navigation.navigate('main')
-    }
-  
-    const handleRegister= ()=>{
-
-        navigation.navigate('RegisterForm')
-
-    }
     return (
-    <View style={styles.container} >
-        <View style={styles.mainContainer} >
-        <View style={styles.textStyle}>
-        
-        <View style={styles.imageContainer}>
-        <Image
-        source={require('../assets/logo.jpg')} 
-        style={styles.image}
-        />
+        <View style={styles.container}>
+            <View style={styles.mainContainer}>
+                {/*logo*/}
+            </View>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.TextInput}
+                    placeholder="CSUN Email"
+                    value={email}
+                    onChangeText={text => setEmail(text)}
+                    placeholderTextColor="darkgrey"
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.TextInput}
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={text => setPassword(text)}
+                    placeholderTextColor="darkgrey"
+                    secureTextEntry={true}
+                />
+            </View>
+            <View style={styles.buttonscontainer}>
+                <TouchableOpacity style={styles.customButton} onPress={handleSignIn}>
+                    <Text style={styles.buttonText}>Log In</Text>
+                </TouchableOpacity>
+            </View>
+            <Text style={styles.additionalText}>Don't have an account?</Text>
+            <TouchableOpacity style={styles.customButton2} onPress={handleRegister}>
+                <Text style={styles.buttonText2}>Register</Text>
+            </TouchableOpacity>
+            {/* CSUN logo */}
         </View>
-
-        <Text style={styles.subtitleText}>
-            The best app to find your next carpool buddy!
-        </Text>
-        </View>
-        </View>
-        <View style={styles.inputContainer}>
-            {/* <TextInput style={styles.TextInput} placeholder="CSUN Email" value={email} onChangeText={(text)=>setEmail(text)}
-             placeholderTextColor="darkgrey"/>
-
-        </View>
-        <View style={styles.inputContainer}>
-            <TextInput  style={styles.TextInput} placeholder="Password" value={password} onChangeText={(text)=>setPassword(text)}
-             placeholderTextColor="darkgrey" secureTextEntry={true} />
-        </View> */}
-             <TextInput style={styles.TextInput} placeholder="CSUN Email"  placeholderTextColor="darkgrey"/>
-
-</View>
-<View style={styles.inputContainer}>
-    <TextInput  style={styles.TextInput} placeholder="Password" placeholderTextColor="darkgrey" secureTextEntry={true} />
-</View>
-        
-        <View style={styles.buttonscontainer}>
-       <TouchableOpacity
-        style={styles.customButton}
-        onPress={handleSignIn}
-        >
-        <Text style={styles.buttonText} >Log In</Text>
-      </TouchableOpacity>
-        </View>
-        <Text style={styles.additionalText}>Don't have an account?</Text>
-        <TouchableOpacity
-        style={styles.customButton2}
-        onPress={handleRegister}
-        >
-        <Text style={styles.buttonText2} >Register</Text>
-      </TouchableOpacity>
-      <View style={styles.image2}>
-     <Image
-     source={require('../assets/CSUNlogo.jpg')} 
-     style={styles.image2}
-     />
-     </View>
-        </View>
-     
-   
     );
-}
+};
 
 export default RegisterScreen;
 const styles=StyleSheet.create({

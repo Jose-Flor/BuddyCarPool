@@ -1,7 +1,7 @@
 
 import {StyleSheet,View,Button, Text}from'react-native'
 import{useState,useEffect,useCallback}from'react'
-import {Bubble, GiftedChat}from'react-native-gifted-chat'
+//import {Bubble, GiftedChat}from'react-native-gifted-chat'
 
 function ChatScreen(){
     const [messages, setMessages] = useState([])

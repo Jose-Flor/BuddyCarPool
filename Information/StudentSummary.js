@@ -17,7 +17,7 @@ function StudentSummary(){
             <View style={styles.UserInfo}>
               <Image
                style={styles.userImage}
-               source={require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/johnsample.jpg')}
+               source={require('../assets/johnsample.jpg')}
                />
                <View style={styles.UserInfoText}>
                 <Text style={styles.UserName}>
@@ -33,7 +33,7 @@ function StudentSummary(){
                       welcome to college 
                     </Text>
                     <Image style={styles.BigImage}
-                     source={require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/media2.jpg')}/>
+                     source={require('../assets/media2.jpg')}/>
                     
 
                      <View style={{flexDirection:'row',marginTop:5}}>
@@ -58,7 +58,7 @@ function StudentSummary(){
             <View style={styles.UserInfo}>
               <Image
                style={styles.userImage}
-               source={require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/johnsample.jpg')}
+               source={require('../assets/johnsample.jpg')}
                />
                <View style={styles.UserInfoText}>
                 <Text style={styles.UserName}>
