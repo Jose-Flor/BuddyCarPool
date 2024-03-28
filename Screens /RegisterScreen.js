@@ -53,7 +53,7 @@ const RegisterScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.mainContainer}>
-                {/*logo*/}
+                <Image source={require('../assets/logo.jpg')} style={{ width: 200, height: 200 }}/>
             </View>
             <View style={styles.inputContainer}>
                 <TextInput
@@ -83,7 +83,7 @@ const RegisterScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.customButton2} onPress={handleRegister}>
                 <Text style={styles.buttonText2}>Register</Text>
             </TouchableOpacity>
-            {/* CSUN logo */}
+            <Image source={require('../assets/CSUNlogo.jpg')} style={{ width: 100, height: 100, marginTop: 60}}/>
         </View>
     );
 };

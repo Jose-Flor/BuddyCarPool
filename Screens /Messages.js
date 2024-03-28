@@ -61,7 +61,7 @@ const styles=StyleSheet.create({
     padding:10,
     borderBottomWidth: 1,
     borderColor: '#cccccc', // Assuming you want a border separator
-   
+
 
     },
     TextSection:{
