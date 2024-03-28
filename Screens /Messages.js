@@ -3,7 +3,7 @@ import ChatScreen from "./ChatScreen";
 const dummy=[
     {id:'1',
     userName:'Ali',
-    userImage:require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/user-4.jpg'),
+    userImage:require('../assets/user-4.jpg'),
     messageTime:'10 min ago',
     messageText:'can you please pick me up from my house '
     
@@ -12,7 +12,7 @@ const dummy=[
     {
         id:'2',
         userName:'johni boy',
-        userImage:require('/Users/ali/CARpoolNew490N/BuddyCarPool/assets/user-5.jpg'),
+        userImage:require('../assets/user-5.jpg'),
         messageTime:'2 min ago',
         messageText:'yes of course '
     }
@@ -61,7 +61,7 @@ const styles=StyleSheet.create({
     padding:10,
     borderBottomWidth: 1,
     borderColor: '#cccccc', // Assuming you want a border separator
-   
+
 
     },
     TextSection:{
