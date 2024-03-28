@@ -1,4 +1,4 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { DrawerActions, NavigationContainer } from "@react-navigation/native";
 import { Text, View, Modal, Button } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -16,6 +16,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import StudentSummary from "../Information/StudentSummary";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ChatScreen from "./ChatScreen";
+import { useNavigation } from "@react-navigation/native";
+import CategoryScreen from "./CategoryScreen";
 //import {createDrawerNavigator}from '@react-navigation/drawer'
 
 const BottomTabs = createBottomTabNavigator();
@@ -51,11 +53,12 @@ function filterHandling({ navigation }) {
 
 // }
 function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
+    const navigation = useNavigation();
     return (
 
         <BottomTabs.Navigator
             initialRouteName="DriverList"
-            screenOptions={({ navigation }) => ({
+            screenOptions={({  }) => ({
 
                 headerStyle: { backgroundColor: GStyle.colors.bottmbTabs },
 
@@ -63,21 +66,25 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
                 tabBarStyle: { backgroundColor: GStyle.colors.bottmbTabs },
                 tabBarActiveBackgroundColor: GStyle.colors.BottomTabsActive,
 
-                headerRight: () => <IconButton icon='menu' size={24} color='white' onPress={() => { navigation.navigate('StudentProfile') }} />,
-                headerLeft: () => <IconButton icon='funnel' size={22} color='white' onPress={() => setIsFilterModalVisible(true)} />
+            
 
             })}>
             <BottomTabs.Screen
                 name="Driver"
-                component={Driverlist}
+                component={CategoryScreen}
                 initialParams={{ filteredDrivers }}
                 options={{
-                    title: "Recent Driver",
+
+                    
+                    title: "Driver Category",
                     tabBarLabel: "Recent",
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="car" size={size} color={'White'} />
                     ),
+                    
+                    
                 }}
+                
             />
                     <BottomTabs.Screen name='StudentSummary' component={StudentSummary} 
                     options={{

@@ -176,7 +176,11 @@ const styles =StyleSheet.create({
       
 
 
+    },
+    interactionButton:{
+      marginHorizontal:60
     }
+  
    
 
     

@@ -118,7 +118,7 @@ function Driverlist({navigation,filteredDrivers}){
             imageUri={item.imageUri}
             selectedDays={item.selectedDays}
             carType={item.driverInfo?.carType} // Pass carType
-  carModel={item.driverInfo?.carModel}
+            carModel={item.driverInfo?.carModel}
 
             onPress={() => handlePress(item)}
             

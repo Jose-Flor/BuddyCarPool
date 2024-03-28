@@ -1,6 +1,9 @@
 
 import {View,Text}from 'react-native';
 
+
+
+
 function DriverSummary({driver}){
     return(
         <View>
