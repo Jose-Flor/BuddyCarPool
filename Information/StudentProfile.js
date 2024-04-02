@@ -5,35 +5,38 @@ import { fetchUserData } from '../back-end/Http';
 
 function StudentProfile({ route }) {
     
-    const { userId } = route.params.userData; // Assuming navigation with parameters
-    const [profileData, setProfileData] = useState(null);
+    // const { userId } = route.params.userData; // Assuming navigation with parameters
+    // const [profileData, setProfileData] = useState(null);
 
-    useEffect(() => {
-        const loadUserData = async () => {
-            try {
-                const data = await fetchUserData(userId); // Adjust according to how you retrieve user data
-                setProfileData(data);
-            } catch (error) {
-                console.error('Failed to fetch user data:', error);
-            }
-        };
+    // useEffect(() => {
+    //     const loadUserData = async () => {
+    //         try {
+    //             const data = await fetchUserData(userId); // Adjust according to how you retrieve user data
+    //             setProfileData(data);
+    //         } catch (error) {
+    //             console.error('Failed to fetch user data:', error);
+    //         }
+    //     };
 
-        loadUserData();
-    }, [userId]);
+    //     loadUserData();
+    // }, [userId]);
   
     // If profileData is null, display a loading message
-    if (!profileData) {
-        return (
-          <View style={styles.container}>
-            <Text style={styles.container}>Loading...</Text>
-          </View>
-        );
-      }
-    // Render the profile with the retrieved user data
+    // if (!profileData) {
+    //     return (
+    //       <View style={styles.container}>
+    //         <Text style={styles.container}>Loading...</Text>
+    //       </View>
+    //     );
+    //   }
+    // // Render the profile with the retrieved user data
     return (
+      <View>
+
       <Text style={styles.container}>
-        Welcome, {profileData.firstName}
+        Welcome,
       </Text>
+      </View>
     );
   }
 export default StudentProfile;

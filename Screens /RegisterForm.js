@@ -124,44 +124,20 @@ async function submitHnadler(){
       Alert.alert('Error', 'Emails or passwords do not match.');
       return;
   }
-  try {
-    const signUpResponse=await signUp(enteredEmail, enteredPassword);
-    const userId=signUpResponse.localId;
-    const userDataFromAuth=await fetchUserData(signUpResponse.idToken);
-    const CompleteUserData={
-      ...userData,
-      ...userDataFromAuth,
-    }
-    await saveUserData(userId,CompleteUserData);
-
-    console.log("registeration was successful");
+  try{
+    const signUpResponse= await signUp(enteredEmail,enteredPassword);
+    await saveUserData(signUpResponse.localId,userData);
+    Alert.alert('Registration Successful', 'Please sign in with your new account.');
+    navigation.navigate('Register');
 
 
 
-
-    //api end points
-    // axios.post('http://10.0.2.2:5000/register', userData)
-    //   .then(response => {
-    //     console.log('Registration successful:', response.data);
-    //     if (typeof onSubmit === 'function') {
-    //       onSubmit(userData, response.data); // Optional callback
-    //     }
-    if(isDriver){
-      navigation.navigate('ScheduleLocation', { userData: { userId: userId } });
-    }else{
-      navigation.navigate('Register');
-    }
   }catch(error){
-    console.error('Registration failed32:', error);
-        Alert.alert('Registration Failed', 'Failed to register. Please try again.');
-  }
-    //   })
-    //   .catch(error => {
-    //     console.error('Registration failed:', error);
-    //     Alert.alert('Registration Failed', 'Failed to register. Please try again.');
-    //   });
+    console.error('Registration failed:', error);
+            Alert.alert('Registration Failed', 'Failed to register. Please try again.');
 
-   
+  }
+ 
 }
 
   
