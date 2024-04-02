@@ -4,7 +4,7 @@ from flask_pymongo import PyMongo
 import datetime
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb+srv://alinox360:carpoolbuddy123@login.q1ris70.mongodb.net/login?retryWrites=true&w=majority&appName=Cluster0"
+app.config["MONGO_URI"] = "mongodb+srv://alinox360:carpoolbuddy123@cluster0.q1ris70.mongodb.net/Login?retryWrites=true&w=majority&appName=Cluster0"
 mongo = PyMongo(app)
 CORS(app, resources={r"/*": {"origins": "exp://10.40.174.182:8081"}})
 
@@ -28,7 +28,7 @@ def login():
 
         # Perform authentication (dummy example)
         # Replace this with your actual authentication logic
-        if email == 'example@example.com' and password == 'password':
+        if email == '1' and password == '1':
             print('Login successful')
             mongo.db.logindata.insert_one({'email': email, 'timestamp': datetime.datetime.now()})
             return jsonify({'success': True, 'message': 'Login successful'})
