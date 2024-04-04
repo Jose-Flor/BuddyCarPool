@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image, Alert } from 'react-native';
-
-
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image, Alert, Platform} from 'react-native';
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -178,7 +176,4 @@ const styles=StyleSheet.create({
         width: 85,
         marginTop: 30,
     },
-
-    
-}
-)    
+})  
