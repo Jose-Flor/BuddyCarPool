@@ -6,7 +6,7 @@ import datetime
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb+srv://alinox360:carpoolbuddy123@cluster0.q1ris70.mongodb.net/Login?retryWrites=true&w=majority&appName=Cluster0"
 mongo = PyMongo(app)
-CORS(app, resources={r"/*": {"origins": "exp://10.40.174.182:8081"}})
+CORS(app, resources={r"/*": {"origins": "exp://10.40.175.222:8081"}})
 
 
 @app.route('/login', methods=['POST'])

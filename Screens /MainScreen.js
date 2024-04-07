@@ -55,63 +55,71 @@ function filterHandling({ navigation }) {
 function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
     const navigation = useNavigation();
     return (
-
-        <BottomTabs.Navigator
-            initialRouteName="DriverList"
-            screenOptions={({  }) => ({
-
-                headerStyle: { backgroundColor: GStyle.colors.bottmbTabs },
-
-                headerTintColor: "white",
-                tabBarStyle: { backgroundColor: GStyle.colors.bottmbTabs },
-                tabBarActiveBackgroundColor: GStyle.colors.BottomTabsActive,
-
+        <View style={{flex: 1}}>
+      <BottomTabs.Navigator
+        initialRouteName="DriverList"
+        screenOptions={({ }) => ({
+          headerShown: false,
+          tabBarStyle: { 
+            backgroundColor: '#de0a26', 
             
-
-            })}>
-            <BottomTabs.Screen
-                name="Driver"
-                component={CategoryScreen}
-                initialParams={{ filteredDrivers }}
-                options={{
-
-                    
-                    title: "Driver Category",
-                    tabBarLabel: "Recent",
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="car" size={size} color={'White'} />
-                    ),
-                    
-                    
-                }}
-                
-            />
-                    <BottomTabs.Screen name='StudentSummary' component={StudentSummary} 
-                    options={{
-                        title:'Students ',
-                        tabBarLabel:'Students',
-                        tabBarIcon:({color,size})=> <Ionicons name="person" size={size} color={color} />
-                    }}
-                    />
-            <BottomTabs.Screen name="MessagesTab" component={MessagesStackNavigator}
-                options={{
-                    title: 'Messages',
-                    tabBarLabel: 'Messages',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='paper-plane' size={size} color={'White'} />
-
-
-                }} />
-            <BottomTabs.Screen name="maps" component={maps}
-                options={{
-                    title: 'Maps',
-                    tabBarLabel: 'Maps',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='map' size={size} color={'White'} />
-                }} />
+       
             
-        </BottomTabs.Navigator>
+            borderTopWidth: 0, 
+            
+            paddingBottom: 15,
+            alignItems: 'center',
+            height: 70,
 
+          },
+          tabBarActiveBackgroundColor: 'transparent',
+          tabBarActiveTintColor: 'white',
+          tabBarLabelStyle: {  textAlign: "bottom" }, 
+        })}
+      >
+        <BottomTabs.Screen
+          name="Driver"
+          component={CategoryScreen}
+          initialParams={{ filteredDrivers }}
+          options={{
+            title: "Driver Category",
+            tabBarLabel: "Recent",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="car" size={size} color={'white'} style={{ borderRadius: 20, borderWidth: 1, borderColor: 'transparent', borderTopRightRadius: 0, borderBottomRightRadius: 0 }}/>
+            ),
+          }}
+        />
+        <BottomTabs.Screen 
+          name='StudentSummary' 
+          component={StudentSummary} 
+          options={{
+            title:'Students',
+            tabBarLabel:'Students',
+            tabBarIcon:({color,size})=> <Ionicons name="person" size={size} color={'white'} />
+          }}
+        />
+        <BottomTabs.Screen 
+          name="MessagesTab" 
+          component={MessagesStackNavigator}
+          options={{
+            title: 'Messages',
+            tabBarLabel: 'Messages',
+            tabBarIcon: ({ color, size }) => <Ionicons name='paper-plane' size={size} color={'white'} />
+          }} 
+        />
+        <BottomTabs.Screen 
+          name="maps" 
+          component={maps}
+          options={{
+            title: 'Maps',
+            tabBarLabel: 'Maps',
+            tabBarIcon: ({ color, size }) => <Ionicons name='map' size={size} color={'white'} />
+          }} 
+        />
+      </BottomTabs.Navigator>
+      </View>
     );
-}
+  }
 
 function MainScreen() {
     const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);

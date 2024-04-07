@@ -44,7 +44,7 @@ const styles=StyleSheet.create({
     buttonText:{
         textAlign: 'center',
         padding:20,
-        color:'black',
+        color:"black",
         fontSize:'50',
         fontFamily:'Helvetica',
     }

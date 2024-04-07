@@ -21,16 +21,25 @@ import DriverDetails from './Information/DriverComponentNew/DriverDetails';
 import CarFavoriteScreen from './Information/DriverComponentNew/CarFavoriteScreen';
 import FavoritesContextProvider from './Information/Store/favorite-context';
 import { Provider } from 'react-redux';
-
+import { Image } from 'react-native';
 
 const Stack=createNativeStackNavigator();
 const Drawer=createDrawerNavigator();
+
+const LogoTitle = () => (
+  <Image
+    style={{ width: 120, height: 30 }}
+    source={require('./assets/CSUNlogo.jpg')}
+    resizeMode="contain"
+  />
+);
+
 
 function DrawerNvaigator(){
   return(
     <Drawer.Navigator  >
       <Drawer.Screen name='Main' component={MainScreen} options={{
-        headerShown:true,
+        headerShown: false,
         headerRight:()=>{
         
         
@@ -58,9 +67,14 @@ export default function App() {
         
         <Stack.Screen  name='main' component={DrawerNvaigator} options={{
           headerShown:true,
-          title:"Carpool",
+          headerTitle: () => (
+            <Image
+              source={require('./assets/logo.jpg')}
+              style={{ width: 100, height: 100, alignSelf: 'flex-start', marginTop: -20 }}
+            />
+          ),
           headerStyle:{
-            backgroundColor:'orangered'
+            backgroundColor:'#de0a26'
           }
           
         }}/>
