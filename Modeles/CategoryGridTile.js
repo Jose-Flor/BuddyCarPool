@@ -45,7 +45,7 @@ const styles=StyleSheet.create({
         textAlign: 'center',
         padding:20,
         color:"black",
-        fontSize:'50',
+        fontSize: 50,
         fontFamily:'Helvetica',
     }
     

@@ -74,7 +74,7 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
           },
           tabBarActiveBackgroundColor: 'transparent',
           tabBarActiveTintColor: 'white',
-          tabBarLabelStyle: {  textAlign: "bottom" }, 
+          
         })}
       >
         <BottomTabs.Screen
