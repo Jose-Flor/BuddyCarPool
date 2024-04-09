@@ -1,29 +1,68 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import axios from 'axios';
 
-const RegisterScreen = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+axios.defaults.httpsAgent = new https.Agent({  
+    rejectUnauthorized: false
+  });
 
-    const handleSignIn = () => {
-        navigation.navigate('main');
+  const RegisterScreen = ({ navigation }) => {
+     const [email, setEmail] = useState('');
+     const [password, setPassword] = useState('');
+     const API_URL =  'http://localhost:5000'
+     const handleSignIn = async () => {
+         try {
+             console.log('Sending POST request to login endpoint...');
+             const response = await fetch('http://10.40.174.182:5000/login', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({
+                     email: email,
+                    password: password
+                })
+             });
+    
+             console.log('Response received:', response);
+    
+             if (!response.ok) {
+                 // Handle non-2xx responses
+                 console.log('Request failed with status:', response.status);
+                 const errorData = await response.json();
+                 console.log('Error data:', errorData);
+                 throw new Error(errorData.error || 'Failed to sign in');
+            }
+    
+             const responseData = await response.json();
+             console.log('Response data:', responseData);
+    
+            if (responseData.success) {
+                 // Login successful, navigate to another screen
+                navigation.navigate('main');
+             } else {
+                 Alert.alert('Error', responseData.error || 'Failed to sign in');
+            }
+         } catch (error) {
+             console.error('Sign-in error:', error.message);
+            Alert.alert('Error', error.message || 'An unexpected error occurred. Please try again later.');
+        }
     };
+    const handleSignIn=()=>{
+        navigation.navigate('main')
+    }
+
+       
 
     const handleRegister = () => {
         navigation.navigate('RegisterForm');
     };
 
     return (
-        <LinearGradient
-            colors={['white', 'white']}
-            style={styles.gradientContainer}
-            start={[0, 0]}
-            end={[1, 1]}
-        >
-            <View style={styles.container}>
+                    <View style={styles.container}>
                 <View style={styles.mainContainer}>
-                    <Image source={require('../assets/logo.jpg')} style={{ width: 250, height: 200 }} />
+                    <Image source={require('../assets/logo.jpg')} style={{ width: 200, height: 200 }}/>
                 </View>
                 <View style={styles.inputContainer}>
                     <TextInput
@@ -53,45 +92,49 @@ const RegisterScreen = ({ navigation }) => {
                 <TouchableOpacity style={styles.customButton2} onPress={handleRegister}>
                     <Text style={styles.buttonText2}>Register</Text>
                 </TouchableOpacity>
-                <Image source={require('../assets/CSUNlogo.jpg')} style={{ width: 100, height: 100, marginTop: 60 }} />
+                <Image source={require('../assets/CSUNlogo.jpg')} style={{ width: 100, height: 100, marginTop: 60}}/>
             </View>
-        </LinearGradient>
-    );
+            );
 };
 
 export default RegisterScreen;
-
-const styles = StyleSheet.create({
-    gradientContainer: {
-        flex: 1,
-    },
-    container: {
-        flex: 1,
+const styles=StyleSheet.create({
+    container:{
+      backgroundColor:'white',
+      flex:1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 50,
+        padding:50,
+
     },
-    dummyText: {
+    
+    dummyText:{
         textDecorationStyle: 'none',
         color: 'red',
     },
+
     imageContainer: {
         width: 250,
         height: 250,
         paddingLeft: 50,
     },
+
     image: {
         flex: 1,
         width: undefined,
-        height: 40,
+        height: undefined,
     },
+
+        
     customButton: {
         backgroundColor: 'black',
         padding: 10,
         borderRadius: 10,
         marginTop: 'none',
     },
-    buttonText: {
+    
+    buttonText:{
+        
         color: 'white',
         fontSize: 15,
         textAlign: 'center',
