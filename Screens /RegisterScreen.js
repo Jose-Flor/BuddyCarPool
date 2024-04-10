@@ -3,9 +3,6 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image, Alert } fro
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
 
-axios.defaults.httpsAgent = new https.Agent({  
-    rejectUnauthorized: false
-  });
 
   const RegisterScreen = ({ navigation }) => {
      const [email, setEmail] = useState('');
@@ -14,7 +11,7 @@ axios.defaults.httpsAgent = new https.Agent({
      const handleSignIn = async () => {
          try {
              console.log('Sending POST request to login endpoint...');
-             const response = await fetch('http://10.40.174.182:5000/login', {
+             const response = await fetch('http://10.40.163.212:5000/login', {
                  method: 'POST',
                  headers: {
                      'Content-Type': 'application/json'
@@ -49,10 +46,7 @@ axios.defaults.httpsAgent = new https.Agent({
             Alert.alert('Error', error.message || 'An unexpected error occurred. Please try again later.');
         }
     };
-    const handleSignIn=()=>{
-        navigation.navigate('main')
-    }
-
+    
        
 
     const handleRegister = () => {

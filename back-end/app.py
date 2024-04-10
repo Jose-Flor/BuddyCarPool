@@ -7,7 +7,7 @@ import bcrypt
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb+srv://alinox360:carpoolbuddy123@cluster0.q1ris70.mongodb.net/Login?retryWrites=true&w=majority&appName=Cluster0&ssl=true"
 mongo = PyMongo(app)
-CORS(app, resources={r"/*": {"origins": "exp://10.40.163.212:8083"}})
+CORS(app, resources={r"/*": {"origins": "exp://10.40.163.212:8081"}})
 
 
 #this is for creating the account from the registration page
