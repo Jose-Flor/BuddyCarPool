@@ -1,145 +1,78 @@
+import React from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
 
-import { useContext, useLayoutEffect } from 'react';
-import {View,Text,Image, StyleSheet, Button} from 'react-native'
-import { useDispatch, useSelector } from 'react-redux';
-import IconButton from '../../Screens /General style/IconButton';
-import { CATEGORIES } from '../dummy-data';
-import { FavoritesContext } from '../Store/favorite-context';
-
-function DriverDetails({route,navigation}){
+function DriverDetails({ route }) {
     const { driverDetails } = route.params;
-    const { ids, addFavorite, removeFavorite } = useContext(FavoritesContext);
-    const isFavorite = ids.includes(driverDetails.id); // Determine if the driver is a favorite
 
-
-    function PressHnadlerHeaderButon (){
-        if (isFavorite) {
-            removeFavorite(driverDetails.id);
-           
-        } else {
-            addFavorite(driverDetails.id);
-            
-
-        }
-    }
-
-    useLayoutEffect(()=>{
-        navigation.setOptions({
-            headerRight:()=>{
-                return(
-                <IconButton 
-                icon={isFavorite?'star':'star-outline' }
-                size='24' color='blue' onPress={PressHnadlerHeaderButon} />
-                );
-            }
-
-        });
-
-    },[navigation,isFavorite])
-
-    
-
-    return(
-        <View style={styles.continer}>
-            <Image style={styles.image} source={{uri:driverDetails.carImageUrl}} />
+    return (
+        <View style={styles.container}>
+            <Image style={styles.image} source={{ uri: driverDetails.imageUrl }} />
             <View>
-                <Text style={styles.nameTile}>{driverDetails.firstName}{driverDetails.LastName}</Text>
+                <Text style={styles.nameTitle}>{driverDetails.firstName} {driverDetails.lastName}</Text>
             </View>
-            <View>
-            <Text> {driverDetails.zipcode}</Text>
-            <View style={styles.subtielContainer}>
-
-                <Text style={styles.subtile}>info </Text>
-            </View >
-            <View >
-                <View style={styles.listItem}>
-
-                <Text style={styles.textItem}>Avialable Days</Text>
-
-                <Text style={styles.textItem}>{driverDetails.availableDays}</Text>
-                </View>
-                <View style={styles.listItem}>
-
-                <Text style={styles.textItem}>LicensePlate</Text>
-                <Text style={styles.textItem}>{driverDetails.licensePlate}</Text>
-                </View>
-                <View style={styles.listItem}>
-
-                <Text style={styles.textItem}>passengerLimit:{driverDetails.passengerLimit}</Text>
-                </View>
+            <View style={styles.subtitleContainer}>
+                <Text style={styles.subtitle}>Info</Text>
             </View>
+            <View style={styles.listItem}>
+                <Text style={styles.textItem}>Car Model: {driverDetails.driverInfo.carModel}</Text>
+                <Text style={styles.textItem}>Passenger Limit: {driverDetails.driverInfo.passengerLimit}</Text>
+                <Text style={styles.textItem}>Zipcode: {driverDetails.driverInfo.zipcode}</Text>
+                <Text style={styles.textItem}>Available Days: {driverDetails.driverInfo.availableDays.join(', ')}</Text>
+                {/* Add more driver info here if needed */}
             </View>
-            <View style={styles.subtielContainer}>
-                <Text style={styles.subtile}>bio</Text>
+            <View style={styles.subtitleContainer}>
+                <Text style={styles.subtitle}>Bio</Text>
             </View>
             <View style={styles.listItem}>
                 <Text style={styles.textItem}>{driverDetails.bio}</Text>
-                
             </View>
         </View>
-        
-
     );
 }
-export default DriverDetails
-const styles=StyleSheet.create({
-    continer:{
-        backgroundColor:'#4C4C47',
-        flex:1
 
+export default DriverDetails;
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#4C4C47',
+        flex: 1
     },
-    image:{
+    image: {
         width: 'auto',
         height: 190,
-
-
     },
-    nameTile:{
+    nameTitle: {
         fontWeight: 'bold',
-        fontSize:24,
-        margin:8,
+        fontSize: 24,
+        margin: 8,
         textAlign: 'center',
-        color:'white'
-
+        color: 'white'
     },
-    subtile:{
-        fontSize:18,
-        
-        fontWeight:"bold",
-        color:'white',
+    subtitleContainer: {
+        borderBottomColor: 'white',
+        borderBottomWidth: 2,
+        padding: 6,
+        margin: 6,
+        marginHorizontal: 24
+    },
+    subtitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: 'white',
         textAlign: 'center',
-        
         borderBottomColor: 'white',
-        borderBottomWidth:2
-
-
-
+        borderBottomWidth: 2
     },
-    subtielContainer:{
-        borderBottomColor: 'white',
-        borderBottomWidth:2,
-        padding:6,
-        margin:6,
-        marginHorizontal:24
-
-
+    listItem: {
+        borderRadius: 6,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        marginVertical: 8,
+        marginHorizontal: 12,
+        backgroundColor: "#E5DCC5"
     },
-    listItem:{
-        borderRadius:6,
-        paddingHorizontal:8,
-        paddingVertical:4,
-        marginVertical:8,
-        marginHorizontal:12,
-        backgroundColor:"#E5DCC5"
-
-
-    },
-    textItem:{
-        color:' #001427',
-        textAlign:'center'
-
-
+    textItem: {
+        color: ' #001427',
+        textAlign: 'center'
     }
-    
-
-})
+});

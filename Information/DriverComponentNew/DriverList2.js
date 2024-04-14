@@ -16,10 +16,10 @@ function DriverList2({id,firstName, LastName, imageUrl, availableDays, carModel,
                 imageUrl,
                 availableDays,
                 carModel,
-                driverInfo, // Assuming you want to pass the entire driverInfo object
+                driverInfo, 
                 licensePlate,
                 driverLicense,
-                CarCategory, // This might be an object, ensure it's serializable
+                CarCategory, 
                 passengerLimit,
                 carImageUrl,
                 bio
@@ -34,7 +34,7 @@ function DriverList2({id,firstName, LastName, imageUrl, availableDays, carModel,
                 <View>
                     <Image source={{uri:imageUrl}} style={styles.image} />
                     <Text style={styles.fulname}>{firstName} {LastName} </Text>
-                    
+            
                     <View style={styles.details}>
                     <Text style={styles.detailitem} >{carModel}</Text>
                     <Text style={styles.detailitem}>{availableDays}</Text>
@@ -51,7 +51,7 @@ function DriverList2({id,firstName, LastName, imageUrl, availableDays, carModel,
 export default DriverList2
 const styles=StyleSheet.create({
     container:{
-        alignItems: 'center', // Center the children horizontally
+        alignItems: 'center', 
        
         padding: 14, 
         margin:16,
