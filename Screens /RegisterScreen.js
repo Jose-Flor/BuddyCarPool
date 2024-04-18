@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useAuth } from '../Information/Store/AuthContext';
+
 
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const{signIn}=useAuth();
+
 
     const handleSignIn = () => {
-        navigation.navigate('main');
-    };
-
+        navigation.navigate('Home')
+    }
     const handleRegister = () => {
         navigation.navigate('RegisterForm');
     };
@@ -22,7 +25,7 @@ const RegisterScreen = ({ navigation }) => {
             end={[1, 1]}
         >
             <View style={styles.container}>
-                <View style={styles.mainContainer}>
+                <View  >
                     <Image source={require('../assets/logo.jpg')} style={{ width: 250, height: 200 }} />
                 </View>
                 <View style={styles.inputContainer}>

@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, View, Text, TouchableOpacity, Dimensions, Modal, Pressable, Image } from 'react-native';
+import { FlatList, StyleSheet, View, Text, TouchableOpacity, Dimensions, Modal, Pressable, Image,SafeAreaView} from 'react-native';
 import { Dummy_Drivers } from '../Information/dummy-data';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import FloatButton from './General style/FloatButton';
+import { FAB } from 'react-native-paper';
+
 
 const windowWidth = Dimensions.get('window').width;
 
 function CategoryScreen({ navigation }) {
+    const [drivers, setDrivers] = useState(Dummy_Drivers); // Initially loaded with dummy data.
+
     const [selectedDays, setSelectedDays] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -55,7 +60,7 @@ function CategoryScreen({ navigation }) {
     }
 
     return (
-        <View style={styles.screen}>
+        <SafeAreaView style={styles.screen}>
             <Text style={styles.bannerText}>View Drivers</Text>
             <TouchableOpacity style={styles.filterButton} onPress={() => setModalVisible(true)}>
                 <Text style={styles.filterButtonText}>Filter</Text>
@@ -107,7 +112,18 @@ function CategoryScreen({ navigation }) {
                     </View>
                 </View>
             </Modal>
-        </View>
+            <FAB
+            style={styles.fab}
+            small
+            icon='plus'
+            onPress={()=>navigation.navigate('CarMapplace')}
+            />
+
+            
+                
+
+            
+        </SafeAreaView>
     );
 }
 
@@ -236,5 +252,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
     },
+    fabContainer: {
+        position: 'absolute',
+        bottom: 20, // Distance from bottom
+        right: 20, // Distance from right
+    },
+    fab: {
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
+    },
+
+
 });
 

@@ -36,7 +36,7 @@ function DriverList2({id,firstName, LastName, imageUrl, availableDays, carModel,
                     <Text style={styles.fulname}>{firstName} {LastName} </Text>
             
                     <View style={styles.details}>
-                    <Text style={styles.detailitem} >{carModel}</Text>
+                    <Text style={styles.detailitem} ></Text>
                     <Text style={styles.detailitem}>{availableDays}</Text>
                     </View>
                 </View>

@@ -34,7 +34,7 @@ export default DriverDetails;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#4C4C47',
+        backgroundColor: '#EAE3EA',
         flex: 1
     },
     image: {
@@ -46,10 +46,10 @@ const styles = StyleSheet.create({
         fontSize: 24,
         margin: 8,
         textAlign: 'center',
-        color: 'white'
+        color: 'black'
     },
     subtitleContainer: {
-        borderBottomColor: 'white',
+        borderBottomColor: 'black',
         borderBottomWidth: 2,
         padding: 6,
         margin: 6,
@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 18,
         fontWeight: "bold",
-        color: 'white',
+        color: 'black',
         textAlign: 'center',
-        borderBottomColor: 'white',
+        borderBottomColor: 'black',
         borderBottomWidth: 2
     },
     listItem: {

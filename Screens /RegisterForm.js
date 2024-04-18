@@ -101,31 +101,32 @@ async function submitHnadler(){
         return;
     }
     
-    const userData = {
-        firstName,
-        lastName,
-        email: enteredEmail,
-        password: enteredPassword,
-        isDriver, // this assumes you have a way to set 'isDriver' in your state
-        carType,
-        carModel,
-        passengerLimit
-    };
-    if (isDriver) {
-        userData.driverInfo = {
-            licensePlate,
-            driverLicense,
-            carModel,
-            carType,
-            passengerLimit
-        };
-    }
+    
     if (enteredEmail !== enteredConfirmEmail || enteredPassword !== enteredConfirmPassword) {
       Alert.alert('Error', 'Emails or passwords do not match.');
       return;
   }
   try{
     const signUpResponse= await signUp(enteredEmail,enteredPassword);
+    const userData = {
+      firstName,
+      lastName,
+      email: enteredEmail,
+      password:enteredPassword,
+      isDriver,
+      carType,
+      carModel,
+      passengerLimit,
+      ...(isDriver && {
+          driverInfo: {
+              licensePlate,
+              driverLicense,
+              carModel,
+              carType,
+              passengerLimit
+          }
+      })
+    }
     await saveUserData(signUpResponse.localId,userData);
     Alert.alert('Registration Successful', 'Please sign in with your new account.');
     navigation.navigate('Register');

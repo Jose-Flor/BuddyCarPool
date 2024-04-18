@@ -22,6 +22,15 @@ import CarFavoriteScreen from './Information/DriverComponentNew/CarFavoriteScree
 import FavoritesContextProvider from './Information/Store/favorite-context';
 import { Provider } from 'react-redux';
 import { Image } from 'react-native';
+import { AuthProvider } from './Information/Store/AuthContext';
+import DrawerContent from './Information/DrawerContent';
+import CarMapplace from './Information/DriverComponentNew/CarMapplace';
+
+import Profile from './Screens /Profile';
+import Feeds from './Information/Feeds';
+import AddPost from './Information/AddPost';
+import PlaceForm from './Information/Places/PlaceForm';
+import LocationPicker from './Information/Places/LocationPicker';
 
 const Stack=createNativeStackNavigator();
 const Drawer=createDrawerNavigator();
@@ -37,9 +46,9 @@ const LogoTitle = () => (
 
 function DrawerNvaigator(){
   return(
-    <Drawer.Navigator  >
+    <Drawer.Navigator drawerContent={props=> <DrawerContent{...props}/>}  >
       <Drawer.Screen name='Main' component={MainScreen} options={{
-        headerShown: false,
+        headerShown: true,
         headerRight:()=>{
         
         
@@ -47,8 +56,9 @@ function DrawerNvaigator(){
         
         
       }}}/>
-      <Drawer.Screen name="StudentProfile" component={StudentProfile}/>
+      <Drawer.Screen name="Profile" component={Profile}/>
       <Drawer.Screen name='CarFavoriteScreen' component={CarFavoriteScreen}/>
+      <Drawer.Screen name='Feeds' component={Feeds}/>
 
     </Drawer.Navigator>
 
@@ -56,6 +66,8 @@ function DrawerNvaigator(){
 }
 export default function App() {
   return (
+    <AuthProvider>
+
     <GestureHandlerRootView style={{flex:1}}>
 <FavoritesContextProvider>
 
@@ -69,15 +81,15 @@ export default function App() {
           headerShown:true,
           headerTitle: () => (
             <Image
-              source={require('./assets/logo.jpg')}
-              style={{ width: 100, height: 100, alignSelf: 'flex-start', marginTop: -20 }}
+            source={require('./assets/logo.jpg')}
+            style={{ width: 100, height: 100, alignSelf: 'flex-start', marginTop: -20 }}
             />
-          ),
-          headerStyle:{
-            backgroundColor:'#de0a26'
-          }
-          
-        }}/>
+            ),
+            headerStyle:{
+              backgroundColor:'#de0a26'
+            }
+            
+          }}/>
         <Stack.Screen name='DriverOverView' component={DriverOverView}
         options={{
           presentation:'modal',
@@ -116,9 +128,10 @@ export default function App() {
         />
         <Stack.Screen name='DriverDetails' component={DriverDetails}
         options={{
+          presentation:'modal',
           
           headerStyle:{
-            backgroundColor:"#708D81"
+            backgroundColor:'#de0a26'
           }
         }}
         />
@@ -126,12 +139,23 @@ export default function App() {
           title:route.params.userName
         })}/>
       <Stack.Screen name='Messages'component={Messages}/> */}
+      <Stack.Screen name='CarMapplace' component={CarMapplace} options={{
+        presentation:'modal',
+        headerStyle:{
+          backgroundColor:'#de0a26',
+          
+        }
+      }}/>
+      <Stack.Screen name='AddPost' component={AddPost}/>
+      <Stack.Screen name='PlaceFrom' component={PlaceForm}/>
+      <Stack.Screen name='LocationPicker' component={LocationPicker}/>
 
       </Stack.Navigator>
     </NavigationContainer> 
 
     </FavoritesContextProvider>
 </GestureHandlerRootView>
+</AuthProvider>
   );
 }
 //later add option={{headerhown:false}} to remove the header
