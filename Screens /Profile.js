@@ -7,7 +7,7 @@ import { useAuth } from "../Information/Store/AuthContext";
 
 
 export default function Profile() {
-    const [profileImage,setProfileImage]=useState(require('/Users/ali/Documents/CarpoolProject/BuddyCarPool/assets/logo1.jpg'));
+    const [profileImage,setProfileImage]=useState(require('../assets/logo1.jpg'));
     const [modalVisible, setModalVisible] = useState(false);
     const [city, setCity] = useState(""); // State for city input
     const [phoneNumber, setPhoneNumber] = useState(""); // State for phone number input

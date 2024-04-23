@@ -11,7 +11,7 @@ import { Dimensions } from 'react-native';
 
 
 function CarMapplace({route,navigation}){
-    const [profileImage,setProfileImage]=useState(require('/Users/ali/Documents/CarpoolProject/BuddyCarPool/assets/logo1.jpg'));
+    const [profileImage,setProfileImage]=useState(require('../../assets/logo1.jpg'));
     const [carImage, setCarImage] = useState(null);
     const [location, setLocation] = useState(null);
     const [mapVisible, setMapVisible] = useState(false);
