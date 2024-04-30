@@ -38,15 +38,14 @@ const LogoTitle = () => (
 function DrawerNvaigator(){
   return(
     <Drawer.Navigator  >
-      <Drawer.Screen name='Main' component={MainScreen} options={{
-        headerShown: false,
-        headerRight:()=>{
+      <Drawer.Screen name='Main' component={MainScreen} />
+        
         
         
 
         
         
-      }}}/>
+      
       <Drawer.Screen name="StudentProfile" component={StudentProfile}/>
       <Drawer.Screen name='CarFavoriteScreen' component={CarFavoriteScreen}/>
 
@@ -63,7 +62,7 @@ export default function App() {
     <NavigationContainer>
 
       <Stack.Navigator initialRouteName='Register'>
-        <Stack.Screen name='Register' component={RegisterScreen} options={{headerShown:false}}/>
+        <Stack.Screen name='Register' component={RegisterScreen} options={{headerShown:true}}/>
         
         <Stack.Screen  name='main' component={DrawerNvaigator} options={{
           headerShown:true,
