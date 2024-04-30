@@ -36,10 +36,24 @@ const LogoTitle = () => (
 
 const HomeScreen = () => <Text>Home Screen</Text>;
 
+<<<<<<< HEAD
 function DrawerNavigator() {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name='Main' component={MainScreen} options={{ headerShown: false }}/>
+=======
+function DrawerNvaigator(){
+  return(
+    <Drawer.Navigator  >
+      <Drawer.Screen name='Main' component={MainScreen} />
+        
+        
+        
+
+        
+        
+      
+>>>>>>> main
       <Drawer.Screen name="StudentProfile" component={StudentProfile}/>
       <Drawer.Screen name='CarFavoriteScreen' component={CarFavoriteScreen}/>
     </Drawer.Navigator>
@@ -48,6 +62,7 @@ function DrawerNavigator() {
 
 export default function App() {
   return (
+<<<<<<< HEAD
     <GestureHandlerRootView style={{ flex: 1 }}>
       <FavoritesContextProvider>
         <NavigationContainer>
@@ -94,5 +109,83 @@ export default function App() {
         </NavigationContainer>
       </FavoritesContextProvider>
     </GestureHandlerRootView>
+=======
+    <GestureHandlerRootView style={{flex:1}}>
+<FavoritesContextProvider>
+
+
+    <NavigationContainer>
+
+      <Stack.Navigator initialRouteName='Register'>
+        <Stack.Screen name='Register' component={RegisterScreen} options={{headerShown:true}}/>
+        
+        <Stack.Screen  name='main' component={DrawerNvaigator} options={{
+          headerShown:true,
+          headerTitle: () => (
+            <Image
+              source={require('./assets/logo.jpg')}
+              style={{ width: 100, height: 100, alignSelf: 'flex-start', marginTop: -20 }}
+            />
+          ),
+          headerStyle:{
+            backgroundColor:'#de0a26'
+          }
+          
+        }}/>
+        <Stack.Screen name='DriverOverView' component={DriverOverView}
+        options={{
+          presentation:'modal',
+          headerStyle:{
+            backgroundColor:'orangered'
+          }
+          
+        }}
+        />
+        <Stack.Screen name='RegisterForm' component={RegisterForm}/>
+        <Stack.Screen  name='ScheduleLocation' component={ScheduleLocation}/>
+        
+        <Stack.Screen name='DriverList' component={Driverlist} />
+        <Stack.Screen name='DriverFilter' component={DriverFilter}/>
+        <Stack.Screen name='Home' component={DrawerNvaigator}
+        options={{
+          headerRight:()=>{
+            return<Text>this is header</Text>
+            
+          }
+        }}
+        />
+        
+        <Stack.Screen name="CategoryScreen " component={CategoryScreen}
+        options={{
+          contentStyle:{backgroundColor:'#BA324F'}
+        }}
+        />
+        <Stack.Screen name='DriverOverView2' component={DriverOverView2}
+        options={{
+          headerStyle:{
+            backgroundColor:"orangered"
+          }
+          
+        }}
+        />
+        <Stack.Screen name='DriverDetails' component={DriverDetails}
+        options={{
+          
+          headerStyle:{
+            backgroundColor:"#708D81"
+          }
+        }}
+        />
+        {/* <Stack.Screen name='ChatScreen' component={ChatScreen} options={({route})=>({
+          title:route.params.userName
+        })}/>
+      <Stack.Screen name='Messages'component={Messages}/> */}
+
+      </Stack.Navigator>
+    </NavigationContainer> 
+
+    </FavoritesContextProvider>
+</GestureHandlerRootView>
+>>>>>>> main
   );
 }
