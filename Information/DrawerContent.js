@@ -4,12 +4,32 @@ import {DrawerContentScrollView,DrawerItem}from '@react-navigation/drawer'
 import{Avatar,Title,Caption,Paragraph,Drawer,Text,TouchableRipple,Switch } from 'react-native-paper'
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const signOut=()=>{
+import { useAuth } from './Store/AuthContext';
 
-}
 const profileImageUri = '/Users/ali/CARpoolNew490N/BuddyCarPool/assets/johnsample.jpg'; 
 
 function DrawerContent(props){
+    const{signOut,user,setuser}=useAuth();
+    const handleSignOut = () => {
+        Alert.alert(
+            "Sign Out",
+            "Are you sure you want to sign out?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Yes", onPress: async () => {
+                        await signOut();
+                        props.navigation.navigate('Register'); // Consider changing this to a 'Login' or 'Welcome' screen
+                    }
+                }
+            ],
+            { cancelable: false }
+        );
+    };
+
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props} >
@@ -69,7 +89,7 @@ function DrawerContent(props){
                                 />
                             )}
                             label="Home"
-                            onPress={() => {props.navigation.navigate('Home')}}
+                            onPress={() => {props.navigation.navigate('Main')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -119,8 +139,7 @@ function DrawerContent(props){
                     />
                 )}
                 label="Sign Out"
-                //on press sign out
-                
+               onPress={handleSignOut}
 
                 />
             </Drawer.Section>

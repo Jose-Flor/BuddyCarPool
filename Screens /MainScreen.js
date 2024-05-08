@@ -58,13 +58,10 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
         <View style={{flex: 1}}>
       <BottomTabs.Navigator
         initialRouteName="DriverList"
-        screenOptions={({ }) => ({
+        screenOptions={({route }) => ({
           headerShown: false,
           tabBarStyle: { 
             backgroundColor: '#de0a26', 
-            
-       
-            
             borderTopWidth: 0, 
             
             paddingBottom: 15,
@@ -74,6 +71,11 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
           },
           tabBarActiveBackgroundColor: 'transparent',
           tabBarActiveTintColor: 'white',
+          headerRight: () => {
+            // Access custom options from route parameters
+            const routeOptions = route.params?.headerRight || null;
+            return routeOptions ? routeOptions() : null;
+          },
           
         })}
       >
@@ -108,11 +110,13 @@ function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
           }} 
         />
         <BottomTabs.Screen 
-          name="maps" 
+          name="Maps" 
           component={maps}
           options={{
             title: 'Maps',
+            headerShown:true,
             tabBarLabel: 'Maps',
+            
             tabBarIcon: ({ color, size }) => <Ionicons name='map' size={size} color={'white'} />
           }} 
         />
@@ -148,7 +152,7 @@ function MainScreen() {
                 if (storedDrivers !== null) {
                     const drivers = JSON.parse(storedDrivers);
                     setAllDrivers(drivers);
-                    console.log('All drivers', drivers)
+                    
                     filterDrivers(drivers, 'Monday');
                 }
             } catch (error) {

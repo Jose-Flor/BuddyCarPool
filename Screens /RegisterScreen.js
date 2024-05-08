@@ -2,17 +2,39 @@ import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../Information/Store/AuthContext';
+import { ActivityIndicator, Button } from 'react-native-paper';
+
 
 
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const{signIn}=useAuth();
+    const{signIn,fetchUserData}=useAuth();
+    const [isLoading, setLoading] = useState(false); 
+     // Loading state
+ 
 
 
-    const handleSignIn = () => {
-        navigation.navigate('Home')
-    }
+     const handleSignIn = async () => {
+        setLoading(true);
+        try {
+          const userData = await signIn(email, password);
+          if (userData && userData.localId) {  // Check for localId instead of idToken
+            Alert.alert('Success', 'You are signed in');
+            // Directly use userData or fetch additional profile data as needed
+            navigation.navigate('Home');
+          } else {
+            throw new Error('Authentication failed');
+          }
+        } catch (error) {
+          Alert.alert("Login Failed", error.message);
+          console.error("Error during sign in:", error);
+        }
+        setLoading(false);
+    };
+    
+      
+
     const handleRegister = () => {
         navigation.navigate('RegisterForm');
     };
@@ -47,15 +69,17 @@ const RegisterScreen = ({ navigation }) => {
                         secureTextEntry={true}
                     />
                 </View>
-                <View style={styles.buttonscontainer}>
-                    <TouchableOpacity style={styles.customButton} onPress={handleSignIn}>
-                        <Text style={styles.buttonText}>Log In</Text>
-                    </TouchableOpacity>
-                </View>
+                {isLoading ? (
+                    <ActivityIndicator animating={true} color="#6200ee" />
+                ) : (
+                    <Button mode="contained" onPress={handleSignIn} style={styles.button}>
+                        Log In
+                    </Button>
+                )}
                 <Text style={styles.additionalText}>Don't have an account?</Text>
-                <TouchableOpacity style={styles.customButton2} onPress={handleRegister}>
-                    <Text style={styles.buttonText2}>Register</Text>
-                </TouchableOpacity>
+                <Button onPress={handleRegister} style={styles.registerButton}>
+                    Register
+                </Button>
                 <Image source={require('../assets/CSUNlogo.jpg')} style={{ width: 100, height: 100, marginTop: 60 }} />
             </View>
         </LinearGradient>
@@ -137,4 +161,17 @@ const styles = StyleSheet.create({
         width: 85,
         marginTop: 30,
     },
+    button: {
+        width: '90%',
+        paddingVertical: 8,
+        
+    },
+    registerButton: {
+        marginTop: 15,
+        color: '#de0a26',
+    },
+    additionalText: {
+        marginTop: 20,
+    },
+
 });

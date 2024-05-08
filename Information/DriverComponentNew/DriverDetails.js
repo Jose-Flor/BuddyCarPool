@@ -1,24 +1,56 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, Alert } from 'react-native';
+import { useAuth } from '../Store/AuthContext'; // Adjust the import path as necessary
+import Loading from '../Store/Loading';
 
 function DriverDetails({ route }) {
-    const { driverDetails } = route.params;
+    const { driverId } = route.params; // Retrieve the passed driverId
+    const { fetchUserData,fetchUserProfile } = useAuth();
+    const [driverDetails, setDriverDetails] = useState(null);
 
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const userProfileData = await fetchUserProfile(driverId);
+                const userData = await fetchUserData(driverId);
+                
+                if (userProfileData && userData) {
+                    // Combine data from both functions if needed
+                    const combinedData = {
+                        ...userProfileData,
+                        ...userData
+                    };
+                    
+                    setDriverDetails(combinedData);
+                } else {
+                    Alert.alert('No data', 'No driver details available.');
+                }
+            } catch (error) {
+                console.error('Error fetching driver details:', error);
+                Alert.alert('Error', 'Failed to fetch driver details.');
+            }
+        };
+    
+        loadData();
+    }, [driverId]);
+    
+    if(Loading){}
+
+    if (!driverDetails) {
+        return <Text>Loading...</Text>; // Add loading state handling
+    }
+if(driverDetails){
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={{ uri: driverDetails.imageUrl }} />
-            <View>
-                <Text style={styles.nameTitle}>{driverDetails.firstName} {driverDetails.lastName}</Text>
-            </View>
+            <Image style={styles.image} source={{ uri: driverDetails.profileImage }} />
+            <Text style={styles.nameTitle}>{driverDetails.firstName} {driverDetails.lastName}</Text>
             <View style={styles.subtitleContainer}>
                 <Text style={styles.subtitle}>Info</Text>
             </View>
             <View style={styles.listItem}>
-                <Text style={styles.textItem}>Car Model: {driverDetails.driverInfo.carModel}</Text>
-                <Text style={styles.textItem}>Passenger Limit: {driverDetails.driverInfo.passengerLimit}</Text>
-                <Text style={styles.textItem}>Zipcode: {driverDetails.driverInfo.zipcode}</Text>
-                <Text style={styles.textItem}>Available Days: {driverDetails.driverInfo.availableDays.join(', ')}</Text>
-                {/* Add more driver info here if needed */}
+                <Text style={styles.textItem}>Car Model: {driverDetails.carModel}</Text>
+                <Text style={styles.textItem}>Passenger Limit: {driverDetails.passengerLimit}</Text>
+                <Text style={styles.textItem}>Available Days: {driverDetails.availableDays ? driverDetails.availableDays.join(', ') : 'Not specified'}</Text>
             </View>
             <View style={styles.subtitleContainer}>
                 <Text style={styles.subtitle}>Bio</Text>
@@ -29,6 +61,7 @@ function DriverDetails({ route }) {
         </View>
     );
 }
+}
 
 export default DriverDetails;
 
@@ -38,8 +71,9 @@ const styles = StyleSheet.create({
         flex: 1
     },
     image: {
-        width: 'auto',
+        width: '100%',
         height: 190,
+        resizeMode: 'cover'
     },
     nameTitle: {
         fontWeight: 'bold',
@@ -59,9 +93,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         color: 'black',
-        textAlign: 'center',
-        borderBottomColor: 'black',
-        borderBottomWidth: 2
+        textAlign: 'center'
     },
     listItem: {
         borderRadius: 6,
@@ -72,7 +104,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#E5DCC5"
     },
     textItem: {
-        color: ' #001427',
+        color: '#001427',
         textAlign: 'center'
     }
 });
