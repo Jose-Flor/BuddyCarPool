@@ -13,6 +13,7 @@ const RegisterScreen = ({ navigation }) => {
     const [isLoading, setLoading] = useState(false); 
      // Loading state
  
+     
 
 
      const handleSignIn = async () => {

@@ -10,10 +10,10 @@ const PostData=[
   {
     id:'1',
     userName:'Ali',
-    userImg:require('/Users/ali/Documents/CarpoolProject/BuddyCarPool/assets/TeslaTest.jpeg'),
+    userImg:require('../assets/TeslaTest.jpeg'),
     onlineTime:'4 hours ago',
     postText:'Ilove college',
-    postImg:require('/Users/ali/Documents/CarpoolProject/BuddyCarPool/assets/TeslaTest2.jpeg'),
+    postImg:require('../assets/TeslaTest2.jpeg'),
     like:false,
 
   }

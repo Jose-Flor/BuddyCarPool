@@ -30,7 +30,7 @@ export default function Profile() {
   const { user, fetchUserData, updateUserData, uploadImage } = useAuth(); // Using useAuth for context
   const [loading, setLoading] = useState(true); // Add a loading state
   const [profileImage, setProfileImage] = useState(
-    require("/Users/ali/Documents/CarpoolProject/BuddyCarPool/assets/logo1.jpg")
+    require("../assets/logo1.jpg")
   );
 
   const [profileData, setProfileData] = useState({
@@ -73,7 +73,7 @@ export default function Profile() {
             phoneNumber: userDetails.phoneNumber || "",
             profileImage: userDetails.profileImage
               ? { uri: userDetails.profileImage }
-              : require("/Users/ali/Documents/CarpoolProject/BuddyCarPool/assets/logo1.jpg"),
+              : require("../assets/logo1.jpg"),
             bio: userDetails.bio || "",
             availability: userDetails.availability || {
               Monday: false,
