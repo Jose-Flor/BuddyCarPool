@@ -1,40 +1,65 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image, Alert } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Image, Alert, Modal, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../Information/Store/AuthContext';
 import { ActivityIndicator, Button } from 'react-native-paper';
 
-
-
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const{signIn,fetchUserData}=useAuth();
-    const [isLoading, setLoading] = useState(false); 
-     // Loading state
- 
-     
+    const { signIn, fetchUserData } = useAuth();
+    const [isLoading, setLoading] = useState(false);
+    const [passcode, setPasscode] = useState('');
+    const [showPasscodeModal, setShowPasscodeModal] = useState(false);
 
-
-     const handleSignIn = async () => {
+    const handleSignIn = async () => {
         setLoading(true);
         try {
-          const userData = await signIn(email, password);
-          if (userData && userData.localId) {  // Check for localId instead of idToken
-            Alert.alert('Success', 'You are signed in');
-            // Directly use userData or fetch additional profile data as needed
-            navigation.navigate('Home');
-          } else {
-            throw new Error('Authentication failed');
-          }
+            const userData = await signIn(email, password);
+            if (userData && userData.localId) {
+                Alert.alert('Success', 'You are signed in', [
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            // Close the alert and navigate to the Home screen
+                            navigation.navigate('Home');
+                        },
+                    },
+                ]);
+            } else {
+                throw new Error('Authentication failed');
+            }
         } catch (error) {
-          Alert.alert("Login Failed", error.message);
-          console.error("Error during sign in:", error);
+            Alert.alert('Login Failed', error.message);
+            console.error('Error during sign in:', error);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
     
-      
+
+    const verifyPasscode = () => {
+        if (passcode === '2765') {
+            // Correct passcode, proceed with sign-in
+            signIn(email, password)
+                .then(userData => {
+                    if (userData && userData.localId) {
+                        Alert.alert('Success', 'You are signed in');
+                        navigation.navigate('Home');
+                    } else {
+                        throw new Error('Authentication failed');
+                    }
+                })
+                .catch(error => {
+                    Alert.alert('Login Failed', error.message);
+                    console.error('Error during sign in:', error);
+                })
+                .finally(() => setLoading(false));
+        } else {
+            // Incorrect passcode
+            Alert.alert('Incorrect Passcode', 'Please enter the correct passcode.');
+        }
+    };
 
     const handleRegister = () => {
         navigation.navigate('RegisterForm');
@@ -48,7 +73,7 @@ const RegisterScreen = ({ navigation }) => {
             end={[1, 1]}
         >
             <View style={styles.container}>
-                <View  >
+                <View>
                     <Image source={require('../assets/logo.jpg')} style={{ width: 250, height: 200 }} />
                 </View>
                 <View style={styles.inputContainer}>
@@ -83,6 +108,28 @@ const RegisterScreen = ({ navigation }) => {
                 </Button>
                 <Image source={require('../assets/CSUNlogo.jpg')} style={{ width: 100, height: 100, marginTop: 60 }} />
             </View>
+            {/* Passcode Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showPasscodeModal}
+                onRequestClose={() => setShowPasscodeModal(false)}
+            >
+                <View style={styles.passcodeModalContainer}>
+                    <View style={styles.passcodeModal}>
+                        <Text>Please enter the passcode:</Text>
+                        <TextInput
+                            style={styles.passcodeInput}
+                            value={passcode}
+                            onChangeText={text => setPasscode(text)}
+                            placeholder="Passcode"
+                            keyboardType="numeric"
+                            secureTextEntry={true}
+                        />
+                        <Button onPress={verifyPasscode}>Verify</Button>
+                    </View>
+                </View>
+            </Modal>
         </LinearGradient>
     );
 };
@@ -99,42 +146,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 50,
     },
-    dummyText: {
-        textDecorationStyle: 'none',
-        color: 'red',
-    },
-    imageContainer: {
-        width: 250,
-        height: 250,
-        paddingLeft: 50,
-    },
-    image: {
-        flex: 1,
-        width: undefined,
-        height: 40,
-    },
-    customButton: {
-        backgroundColor: 'black',
-        padding: 10,
-        borderRadius: 10,
-        marginTop: 'none',
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 15,
-        textAlign: 'center',
-    },
-    buttonText2: {
-        color: '#de0a26',
-        fontSize: 15,
-        textAlign: 'center',
-    },
-    buttonscontainer: {
-        marginTop: 50,
-        padding: 10,
-        width: '90%',
-        borderRadius: 55,
-    },
     inputContainer: {
         alignItems: 'center',
         width: '100%',
@@ -147,25 +158,10 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#ECECEC',
     },
-    titleText: {
-        fontStyle: 'italic',
-        fontSize: 60,
-        color: 'red',
-        textAlign: 'center',
-    },
-    subtitleText: {
-        color: 'black',
-        textAlign: 'center',
-    },
-    image2: {
-        height: 85,
-        width: 85,
-        marginTop: 30,
-    },
     button: {
         width: '90%',
         paddingVertical: 8,
-        
+        marginTop: 10,
     },
     registerButton: {
         marginTop: 15,
@@ -174,5 +170,23 @@ const styles = StyleSheet.create({
     additionalText: {
         marginTop: 20,
     },
-
+    passcodeModalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    passcodeModal: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        elevation: 5,
+    },
+    passcodeInput: {
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: 'black',
+        padding: 10,
+        marginVertical: 10,
+    },
 });

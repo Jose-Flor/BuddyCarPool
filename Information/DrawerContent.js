@@ -42,17 +42,17 @@ function DrawerContent(props){
 
                             />
                             <View style={{marginLeft:15, flexDirection:'column'}}>
-                                <Title style={style.title}>Ali</Title>
-                                <Caption style={style.caption}>@ali</Caption>
+                                <Title style={style.title}>Jose</Title>
+                                <Caption style={style.caption}>@jose.flores.766</Caption>
                             </View>
                         </View>
                         <View style={style.row}>
                             <View style={style.section}>
-                                <Paragraph style={[style.paragraph, style.caption]}>80</Paragraph>
+                                <Paragraph style={[style.paragraph, style.caption]}>4</Paragraph>
                                 <Caption style={style.caption}>Following</Caption>
                             </View>
                             <View style={style.section}>
-                                <Paragraph style={[style.paragraph, style.caption]}>100</Paragraph>
+                                <Paragraph style={[style.paragraph, style.caption]}>4</Paragraph>
                                 <Caption style={style.caption}>Followers</Caption>
                             </View>
                             </View>
@@ -139,7 +139,7 @@ function DrawerContent(props){
                     />
                 )}
                 label="Sign Out"
-               onPress={handleSignOut}
+                onPress={() => {props.navigation.navigate('Register')}}
 
                 />
             </Drawer.Section>

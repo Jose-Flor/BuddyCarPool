@@ -1,133 +1,73 @@
-import React, { useState, useEffect, useLayoutEffect,useCallback } from 'react';
-import { View, StyleSheet, Text, Alert } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import * as Location from 'expo-location';
 
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
-import IconButton from './General style/IconButton';
-import { Icon } from 'react-native-elements';
 
 
 const Maps = () => {
-    const navigation = useNavigation(); // Use the hook to get navigation object
-    const [region, setRegion] = useState({
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-    });
-    const [location, setLocation] = useState(null);
-    const [hasPermission, setHasPermission] = useState(null);
+  // Coordinates for CSUN
+  const CSUNCoordinates = { latitude: 34.2419, longitude: -118.5283 };
 
-    useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setHasPermission(false);
-                Alert.alert('Permission Denied', 'Permission to access location was denied');
-                return;
-            }
-            let currentLocation = await Location.getCurrentPositionAsync({});
-            setLocation(currentLocation.coords);
-            setRegion({
-                ...region,
-                latitude: currentLocation.coords.latitude,
-                longitude: currentLocation.coords.longitude,
-            });
-            setHasPermission(true);
-        })();
-    }, []);
+  // Generate random coordinates within specific ranges
+  const generateRandomCoordinate = (latitudeRange, longitudeRange) => {
+    const latitude = latitudeRange.min + Math.random() * (latitudeRange.max - latitudeRange.min);
+    const longitude = longitudeRange.min + Math.random() * (longitudeRange.max - longitudeRange.min);
+    return { latitude, longitude };
+  };
 
-    function selectLocationHandler(event) {
-        const { latitude, longitude } = event.nativeEvent.coordinate;
-        setLocation({
-            latitude: latitude,
-            longitude: longitude
-        });
-        setRegion(prev => ({
-            ...prev,
-            latitude: latitude,
-            longitude: longitude,
-        }));
-    }
+  // Ranges for different locations
+  const locations = {
+    VanNuys: { latitude: { min: 34.1800, max: 34.2000 }, longitude: { min: -118.4700, max: -118.4900 } },
+    PorterRanch: { latitude: { min: 34.2800, max: 34.3000 }, longitude: { min: -118.5600, max: -118.5800 } },
+    SanFernando: { latitude: { min: 34.2800, max: 34.3000 }, longitude: { min: -118.4400, max: -118.4600 } },
+    Burbank: { latitude: { min: 34.1800, max: 34.2000 }, longitude: { min: -118.3200, max: -118.3400 } },
+    WestHollywood: { latitude: { min: 34.0800, max: 34.1000 }, longitude: { min: -118.3700, max: -118.3900 } },
+    DowntownLA: { latitude: { min: 34.0500, max: 34.0700 }, longitude: { min: -118.2400, max: -118.2600 } },
+    Glendale: { latitude: { min: 34.1400, max: 34.1600 }, longitude: { min: -118.2500, max: -118.2700 } },
+    Reseda: { latitude: { min: 34.1800, max: 34.2000 }, longitude: { min: -118.5300, max: -118.5500 } },
+    AtwaterVillage: { latitude: { min: 34.1180, max: 34.1280 }, longitude: { min: -118.2620, max: -118.2820 } },
+    CanogaPark: { latitude: { min: 34.2000, max: 34.2200 }, longitude: { min: -118.6200, max: -118.6400 } },
+    NorthHollywood: { latitude: { min: 34.1800, max: 34.2000 }, longitude: { min: -118.3800, max: -118.4000 } },
+    StudioCity: { latitude: { min: 34.1400, max: 34.1600 }, longitude: { min: -118.3800, max: -118.4000 } },
+    Chatsworth: { latitude: { min: 34.2300, max: 34.2500 }, longitude: { min: -118.6000, max: -118.6200 } },
+    SantaMonica: { latitude: { min: 34.0100, max: 34.0300 }, longitude: { min: -118.4900, max: -118.5100 } },
+    Pacoima: { latitude: { min: 34.2600, max: 34.2800 }, longitude: { min: -118.4200, max: -118.4400 } },
+    SantaClarita: { latitude: { min: 34.3800, max: 34.4000 }, longitude: { min: -118.5200, max: -118.5400 } },
+    Inglewood: { latitude: { min: 33.9500, max: 33.9700 }, longitude: { min: -118.3300, max: -118.3500 } },
 
-    if (hasPermission === false) {
-        return (
-            <View style={styles.centered}>
-                <Text>No permission to access location</Text>
-            </View>
-        );
-    }
+  };
 
-    const savePickedLocation = useCallback(() => {
-      if (!location) {
-          Alert.alert('No picked location!', 'You have to pick a location first.');
-          return;
-      }
-      navigation.navigate('CarMapplace', { pickedLocation: { lat: location.latitude, lng: location.longitude } });
-    }, [navigation, location]);
-    
+  // Generate random coordinates for each location
+  const randomCoordinates = Object.keys(locations).map((locationName) => ({
+    name: locationName,
+    coordinate: generateRandomCoordinate(locations[locationName].latitude, locations[locationName].longitude),
+  }));
 
-    useEffect(() => {
-      navigation.setOptions({
-          headerRight: ({tintColor}) => (
-              <IconButton icon="save" size={20} color={tintColor} onPress={savePickedLocation}/>
-          ),
-      });
-  }, [navigation, savePickedLocation]);
-const goToCurrentLocation = async () => {
-  let { status } = await Location.requestForegroundPermissionsAsync();
-  if (status !== 'granted') {
-      Alert.alert('Permission Denied', 'Permission to access location was denied');
-      return;
-  }
-  let currentLocation = await Location.getCurrentPositionAsync({});
-  setLocation(currentLocation.coords);
-  setRegion({
-      ...region,
-      latitude: currentLocation.coords.latitude,
-      longitude: currentLocation.coords.longitude,
-  });
-};
+  return (
+    <View style={styles.container}>
+      <MapView style={styles.map} initialRegion={{ ...CSUNCoordinates, latitudeDelta: 0.3, longitudeDelta: 0.3 }}>
+        {/* CSUN Marker */}
+        <Marker coordinate={CSUNCoordinates} title="California State University, Northridge" pinColor="blue" />
 
-    return (
-        <View style={styles.container}>
-            <MapView
-                style={styles.map}
-                initialRegion={region}
-                region={region}
-                onPress={selectLocationHandler}
-            >
-                {location && (
-                    <Marker
-                        coordinate={location}
-                        title={"Selected Location"}
-                    />
-                )}
-            </MapView>
-            <Icon
-            reverse
-            name='my-location'
-            type='material'
-            color='#517fa4'
-            onPress={goToCurrentLocation}
-            />
-        </View>
-    );
+        {/* Random Markers */}
+        {randomCoordinates.map(({ name, coordinate }, index) => (
+          <Marker key={index} coordinate={coordinate} title={name} pinColor="red" />
+        ))}
+      </MapView>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    map: {
-        flex: 1,
-    },
-    centered: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  map: {
+    width: '100%',
+    height: '100%',
+  },
 });
 
 export default Maps;

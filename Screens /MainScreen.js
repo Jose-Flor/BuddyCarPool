@@ -52,78 +52,107 @@ function filterHandling({ navigation }) {
 //     )
 
 // }
+
+
+
+
+//WORK HERE ONLY Make icona hollows unless theyre clicked on like Instagram
 function TabsOverview({ setIsFilterModalVisible, filteredDrivers }) {
     const navigation = useNavigation();
     return (
         <View style={{flex: 1}}>
+
       <BottomTabs.Navigator
         initialRouteName="DriverList"
-        screenOptions={({route }) => ({
+        screenOptions={({ }) => ({
           headerShown: false,
           tabBarStyle: { 
-            backgroundColor: '#de0a26', 
+            backgroundColor: '#1A1A1A', 
             borderTopWidth: 0, 
-            
             paddingBottom: 15,
             alignItems: 'center',
             height: 70,
-
           },
           tabBarActiveBackgroundColor: 'transparent',
-          tabBarActiveTintColor: 'white',
-          headerRight: () => {
-            // Access custom options from route parameters
-            const routeOptions = route.params?.headerRight || null;
-            return routeOptions ? routeOptions() : null;
+          tabBarActiveTintColor: 'red',
+          tabBarLabelStyle: {
+            fontSize: 13, 
+            fontWeight: '400'
           },
-          
+   
         })}
       >
-        <BottomTabs.Screen
+      
+      <BottomTabs.Screen 
           name="Driver"
           component={CategoryScreen}
           initialParams={{ filteredDrivers }}
           options={{
             title: "Driver Category",
             tabBarLabel: "Recent",
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="car" size={size} color={'white'} style={{ borderRadius: 20, borderWidth: 1, borderColor: 'transparent', borderTopRightRadius: 0, borderBottomRightRadius: 0 }}/>
+            tabBarIcon: ({ focused, color, size }) => (
+              <Ionicons 
+                name={focused ? "car-sport-sharp" : "car-sport-outline"} // "car" when focused, "car-outline" when not focused
+                size={size} 
+                color={'#CE1126'} 
+              />
             ),
           }}
-        />
-        <BottomTabs.Screen 
+      />
+
+      <BottomTabs.Screen 
           name='StudentSummary' 
           component={StudentSummary} 
           options={{
             title:'Students',
             tabBarLabel:'Students',
-            tabBarIcon:({color,size})=> <Ionicons name="person" size={size} color={'white'} />
+            tabBarIcon:({ focused, color, size })=> (
+              <Ionicons 
+                name={focused ? "person" : "person-outline"} 
+                size={size} 
+                color={'#CE1126'} 
+              />
+            )
           }}
+      />
+
+     <BottomTabs.Screen 
+    name="MessagesTab" 
+    component={MessagesStackNavigator}
+    options={{
+      title: 'Messages',
+      tabBarLabel: 'Messages',
+      tabBarIcon: ({ focused, color, size }) => (
+        <Ionicons 
+          name={focused ? 'paper-plane' : 'paper-plane-outline'} 
+          size={size} 
+          color={'#CE1126'}
         />
-        <BottomTabs.Screen 
-          name="MessagesTab" 
-          component={MessagesStackNavigator}
-          options={{
-            title: 'Messages',
-            tabBarLabel: 'Messages',
-            tabBarIcon: ({ color, size }) => <Ionicons name='paper-plane' size={size} color={'white'} />
-          }} 
+      )
+    }} 
+  />
+  <BottomTabs.Screen 
+    name="Maps" 
+    component={maps}
+    options={{
+      title: 'Maps',
+      tabBarLabel: 'Maps',
+      tabBarIcon: ({ focused, color, size }) => (
+        <Ionicons 
+          name={focused ? 'map' : 'map-outline'}
+          size={size} 
+          color={'#CE1126'}
         />
-        <BottomTabs.Screen 
-          name="Maps" 
-          component={maps}
-          options={{
-            title: 'Maps',
-            headerShown:true,
-            tabBarLabel: 'Maps',
-            
-            tabBarIcon: ({ color, size }) => <Ionicons name='map' size={size} color={'white'} />
-          }} 
-        />
-      </BottomTabs.Navigator>
+      )
+    }} 
+  />
+</BottomTabs.Navigator>
       </View>
     );
   }
+
+// stop here
+
 
 function MainScreen() {
     const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
@@ -152,7 +181,7 @@ function MainScreen() {
                 if (storedDrivers !== null) {
                     const drivers = JSON.parse(storedDrivers);
                     setAllDrivers(drivers);
-                    
+                    console.log('All drivers', drivers)
                     filterDrivers(drivers, 'Monday');
                 }
             } catch (error) {

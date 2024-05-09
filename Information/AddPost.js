@@ -1,128 +1,207 @@
-
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
-import React, { useState, useContext } from 'react';
-import { Ionicons } from '@expo/vector-icons'; // Correct import statement
-
-
+// AddPost.js
+import React, { useState } from 'react';
+import { View, TextInput, Button, TouchableOpacity, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { useAuth } from './Store/AuthContext';
-import { Button } from 'react-native-paper';
-import { color } from 'react-native-elements/dist/helpers';
+import { useNavigation } from '@react-navigation/native';
 
+const suggestions = [
+    { label: 'Need a ride 🚗', value: 'Need a ride 🚗' },
+    { label: 'Car got crashed 🚗💥', value: 'Car got crashed 🚗💥' },
+    { label: 'Need carpool 🚗👥', value: 'Need carpool 🚗👥' },
+    { label: 'Tire burst 🚗💥🔧', value: 'Tire burst 🚗💥🔧' },
+    { label: 'Traffic jam 🚗🚦', value: 'Traffic jam 🚗🚦' },
+    { label: 'Out of gas ⛽️', value: 'Out of gas ⛽️' },
+    { label: 'Car service due 🚗🔧', value: 'Car service due 🚗🔧' },
+    { label: 'Stuck in a parking lot 🚗🅿️', value: 'Stuck in a parking lot 🚗🅿️' },
+    { label: 'Car overheated 🚗🔥', value: 'Car overheated 🚗🔥' },
+    { label: 'Got a speeding ticket 🚗💨🎫', value: 'Got a speeding ticket 🚗💨🎫' },
+    { label: 'Windshield cracked 🚗🕶️', value: 'Windshield cracked 🚗🕶️' },
+    { label: 'Lost car keys 🚗🔑', value: 'Lost car keys 🚗🔑' },
+];
 
-
-
-
-function AddPost(){
-    const { user, uploadImage, saveUserData } = useAuth();
-
-    const [image, setImage] = useState(null);
-    const [uploading, setUploading] = useState(false);
+function AddPost() {
     const [post, setPost] = useState('');
-    const [postMedia, setPostMedia] = useState({ type: null, uri: null });
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [photo, setPhoto] = useState(null);
+    const navigation = useNavigation();
 
-  
-   const takePhotoFromCamera=async()=>{
-    let { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-        alert('Sorry, we need camera permissions to make this work!');
-        return;
-    }
-    let result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-    });
-    if (!result.canceled) {
-        setPostMedia({ type: 'image', uri: result.assets[0].uri });
-    }
+    const selectSuggestion = (suggestion) => {
+        setPost(post + suggestion.value);
+        setShowSuggestions(false);
+    };
 
-   }
+    const submitPost = () => {
+        const newPost = { postText: post, postImg: photo };
+        navigation.navigate('StudentSummary', { newPost });
+    };
 
-      
-    const submitPost = async () => {
-        if ( !post) {
-          Alert.alert('Missing fields', 'Please  a post description.');
-          return;
+    const takePhotoFromCamera = async () => {
+        let { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Sorry, we need camera permissions to make this work!');
+            return;
         }
-        setUploading(true);
+        let result = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+        if (!result.cancelled) {
+            setPhoto(result.uri);
+            console.log('Image captured:', result.uri);
+        }
+    };
 
-    const imageUrl = await uploadImage(postMedia.uri, user.uid);
-    if (imageUrl) {
-      const postData = {
-        userId: user.uid,
-        post,
-        postImg: imageUrl,
-        postTime: new Date().toISOString(),
-        likes: [],
-        comments: [],
-      };
-     await saveUserData(user.uid, postData);
-      Alert.alert('Post published!', 'Your post has been published Successfully!');
-      setPost('');
-      setImage({ type: null, uri: null });
-    } else {
-      Alert.alert('Upload failed', 'Failed to upload image.');
-    }
-    setUploading(false);
-  };
+    const choosePhotoFromLibrary = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        if (!result.cancelled) {
+            setPhoto(result.uri);
+            console.log('Image selected:', result.uri);
+        }
+    };
 
-
-  const choosePhotoFromLibrary = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-    });
-    if (!result.canceled) {
-        setPostMedia({ type: 'image', uri: result.assets[0].uri });
-    }
-
-  };
-  
-    
     return (
-        <View style={style.inputWrapper}>
-           {postMedia.uri && <Image source={{ uri: postMedia.uri  }} style={style.image} />}
-      <TextInput
-        style={style.input}
-        onChangeText={setPost}
-        value={post}
-        multiline
-        numberOfLines={4}
-        placeholder="What's on your mind?"
-        placeholderTextColor="#666"
-      />
-          
-          {uploading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-       <Button
-       mode='contained'
-       
-       onPress={submitPost}
-       style={style.button}
-       loading={uploading}
-       disabled={uploading}
-       
-       >
-
-        Post
-       </Button>
-      )}
-      <View style={style.iconRow}>
-        <TouchableOpacity onPress={takePhotoFromCamera}>
-          <Ionicons name="camera-outline" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={choosePhotoFromLibrary}>
-          <Ionicons name="image-outline" size={30} color="black" />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.container}>
+            <View style={styles.inputWrapper}>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={setPost}
+                    value={post}
+                    multiline
+                    placeholder="What's on your mind?"
+                    placeholderTextColor="#666"
+                    autoFocus={true}
+                    selectionColor="#2e64e5"
+                />
+                <TouchableOpacity style={styles.suggestionButton} onPress={() => setShowSuggestions(!showSuggestions)}>
+                    <Ionicons name="car-outline" size={24} color="#2e64e5" />
+                </TouchableOpacity>
+            </View>
+            {showSuggestions && (
+                <View style={styles.suggestionWrapper}>
+                    <ScrollView>
+                        {suggestions.map((suggestion, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                style={styles.suggestionItem}
+                                onPress={() => selectSuggestion(suggestion)}
+                            >
+                                <Text style={styles.suggestionText}>{suggestion.label}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                </View>
+            )}
+            <View style={styles.buttonWrapper}>
+                <TouchableOpacity style={styles.button} onPress={takePhotoFromCamera}>
+                    <View style={styles.iconSquare}>
+                        <Ionicons name="camera-outline" size={24} color="#999" />
+                    </View>
+                    <Text style={styles.buttonText}>Camera</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={choosePhotoFromLibrary}>
+                    <View style={styles.iconSquare}>
+                        <Ionicons name="image-outline" size={24} color="#999" />
+                    </View>
+                    <Text style={styles.buttonText}>Gallery</Text>
+                </TouchableOpacity>
+                <Button onPress={submitPost} title="Post" />
+            </View>
+            {photo && (
+                <View style={styles.imagePreview}>
+                    <Text style={styles.imageText}>Selected Image:</Text>
+                    <Image source={{ uri: photo }} style={styles.image} />
+                </View>
+            )}
         </View>
-      );
-    
+    );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#F5F5F5',
+        padding: 20,
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    input: {
+        flex: 1,
+        minHeight: 100,
+        padding: 10,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        backgroundColor: '#f0f0f0',
+        marginRight: 10,
+    },
+    suggestionButton: {
+        backgroundColor: '#f0f0f0',
+        padding: 10,
+        borderRadius: 5,
+    },
+    suggestionWrapper: {
+        backgroundColor: '#f0f0f0',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
+        flex: 1,
+    },
+    suggestionItem: {
+        backgroundColor: '#fff',
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 5,
+    },
+    suggestionText: {
+        fontSize: 16,
+        color: '#2e64e5',
+    },
+    buttonWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+    },
+    button: {
+        alignItems: 'center',
+    },
+    buttonText: {
+        marginTop: 5,
+        color: '#999',
+    },
+    iconSquare: {
+        backgroundColor: '#f0f0f0',
+        width: 50,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+    imagePreview: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    imageText: {
+        fontSize: 18,
+        marginBottom: 10,
+    },
+    image: {
+        width: 200,
+        height: 200,
+        borderRadius: 10,
+    },
+});
+
 export default AddPost;
+
+
 
 const style= StyleSheet.create({
     inputWrapper: {
